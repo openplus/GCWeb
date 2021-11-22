@@ -100,7 +100,7 @@ d3.csv("tbl01-en.csv", type, function (error, data) {
         .entries(data);
 
     // We are created the radio box, to select which category we want to see the data
-    var labelAllCategories = d3.select("form")
+    var labelAllCategories = d3.select(".donut-labels")
         .append("div")
         .attr("class", "form-group")
         .append("p").append("strong")
