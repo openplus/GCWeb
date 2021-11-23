@@ -1,5 +1,6 @@
-// TODO: Confirm if we need to use the latest version of D3 (preferably. yes). if we NEED to use the latest version, will need to convert this code
-var width = 600,
+// TODO: Confirm if we need to use the latest version of D3 (preferably. yes). if we need to use the latest version, will need to convert this code
+// TODO: Responsive design
+var width = 650,
     height = 600,
     margin = 50,
     radius = Math.min(width, height) / 2 - margin;
@@ -23,12 +24,14 @@ var svg = d3.select(".donut-chart")
     .attr("width", width)
     .attr("height", height)
     .append("g")
-    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+    .attr("transform", "translate(" + ((width / 2) - (margin * 2)) + "," + height / 2 + ")");
 
 svg.append("g").attr("class", "slices");
-svg.append("g").attr("class", "label-total");
+svg.append("g").attr("aria-label", "Total").attr("class", "label-total");
+svg.append("g").attr("aria-label", "Legend").attr("class", "legend").attr("transform", "translate(" + (width / 2 - (margin * 2)) + ",-" + ((height / 2) - (margin * 2.50)) + ")");
 
 var path = svg.select(".slices").selectAll("path");
+
 
 d3.csv("tbl01-en.csv", type, function (error, data) {
     if (error) throw error;
@@ -36,9 +39,9 @@ d3.csv("tbl01-en.csv", type, function (error, data) {
     /*  
         STARTS TABLE
         Add a table,
-        TODO: Be able to add and remove row depending of what is selected
+        TODO: Be able to add and remove row depending of what is selected, and be able to sort
      */
-    var table = d3.select('.donut-chart')
+   var table = d3.select('.donut-chart')
         .append('table')
         .attr("class", "wb-tables table table-striped table-hover");
 
@@ -100,47 +103,11 @@ d3.csv("tbl01-en.csv", type, function (error, data) {
         .entries(data);
 
     // We are created the radio box, to select which category we want to see the data
-    var labelAllCategories = d3.select(".donut-labels")
-        .append("div")
-        .attr("class", "form-group")
-        .append("p").append("strong")
-        .text("Select a category")
-        .selectAll("div")
-        .data(allCategories)
-        .enter().append("div")
-        .attr("class", "radio").append("label");
-
-    labelAllCategories.append("input")
-        .attr("type", "radio")
-        .attr("name", "categories")
-        .attr("value", function (d) { return d.key; })
-        .on("change", updateGraph)
-        .property("checked", true);
-        
-    labelAllCategories.append("span")
-        .text(function (d) { return d.key; });
+    createInput(allCategories, "radio", updateGraph, "categories");
 
     // We created the checkbox to choose which region we want to show
     // TODO: Validate if it would be better to add the select tag instead of the checkbox
-    var labelAllNames = d3.select("form")
-        .append("div")
-        .attr("class", "form-group")
-        .append("p").append("strong")
-        .text("Select a province or territory")
-        .selectAll("div")
-        .data(allCategories[0].values)
-        .enter().append("div")
-        .attr("class", "checkbox").append("label");
-
-    labelAllNames.append("input")
-        .attr("type", "checkbox")
-        .attr("name", "names")
-        .attr("value", function (d) { return d.key; })
-        .on("change", updateGraph)
-        .property("checked", true);
-        
-    labelAllNames.append("span")
-        .text(function (d) { return d.key; });
+    createInput(allCategories[0].values, "checkbox", updateGraph, "names");
 
     // Create graph in screen
     updateGraph();
@@ -148,12 +115,12 @@ d3.csv("tbl01-en.csv", type, function (error, data) {
     function updateGraph() {
         // Variable that will contain selected provinces/territories with selected category
         var selectedDataSet = [];
-
+        
         d3.select(".donut-labels").selectAll('input[type="radio"]').each(function (d) {
             r = d3.select(this);
             // If the checkbox is selected
             if (r.property("checked")) {
-                d3.select("form").selectAll('input[type="checkbox"]').each(function (e) {
+                d3.select(".donut-labels").selectAll('input[type="checkbox"]').each(function (e) {
                     cb = d3.select(this);
                     if (cb.property("checked")) {
                         // Gather information selected with checkboxes
@@ -166,6 +133,7 @@ d3.csv("tbl01-en.csv", type, function (error, data) {
                 });
             }
         });
+
 
         // Varaible that push the new data together for a simpler version of the array
         var newDataSet = [];
@@ -183,7 +151,8 @@ d3.csv("tbl01-en.csv", type, function (error, data) {
         // SEE: https://fossheim.io/writing/posts/accessible-dataviz-d3-intro/
         path = path.data(data1, key);
 
-        path.enter().append("path")
+        path.enter()
+            .append("path")
             .each(function (d, i) { this._current = findNeighborArc(i, data0, data1, key) || d; })
             .attr("fill", function (d) { return color(d.data.name); })
             .attr("stroke", "white")
@@ -202,6 +171,7 @@ d3.csv("tbl01-en.csv", type, function (error, data) {
             .duration(750)
             .attrTween("d", arcTween);
 
+
         // We will now calculate the total of each input selected and show it in the middle of the donut
         var total = 0;
         for (var i = 0; i < newDataSet.length; i++) {
@@ -213,7 +183,7 @@ d3.csv("tbl01-en.csv", type, function (error, data) {
         labelTotal.append("text")
             .attr('dy', '.35em')
             .attr('text-anchor', 'middle')
-            .html(total)
+            .text(total)
             .style('fill', 'black')
             .style('opacity', 1);
 
@@ -226,7 +196,32 @@ d3.csv("tbl01-en.csv", type, function (error, data) {
                 }
             });
 
-        // TODO: Re-add the legend (?)
+        // We append the legend with the current information 
+        var legend = svg.select(".legend")
+            .selectAll('.legend-entry')
+            .data(newDataSet)
+            .enter()
+            .append('g')
+            .attr('class', 'legend-entry')
+            .attr("transform", function(d, i) { return "translate(0," + i * 25 + ")"; });
+
+        legend.append('rect')
+            .attr('class', 'legend-rect')
+            .attr('width', 18)
+            .attr('height', 18)
+            .attr('fill', function (d) {
+                return color(d.name);
+            });
+        
+        legend.append('text')
+            .attr('class', 'legend-text')
+            .attr('x', 25)
+            .attr('y', 10)
+            .attr("dy", "0.35em")
+            .text(function (d) {
+                return d.name;
+            });
+
         // TODO: try to re-add the label, but may be with a tooltip this time ?
     }
 });
@@ -277,4 +272,25 @@ function arcTween(d) {
     var i = d3.interpolate(this._current, d);
     this._current = i(0);
     return function (t) { return arc(i(t)); };
+}
+
+// Small function to generate the input, to avoid repeating ourself
+function createInput(data, type, onChange, name) {
+    var createLabels = d3.select(".donut-labels")
+        .append("div")
+        .attr("class", "form-group")
+        .selectAll("div")
+        .data(data)
+        .enter().append("div")
+        .attr("class", type).append("label");
+
+    createLabels.append("input")
+        .attr("type", type)
+        .attr("name", name)
+        .attr("value", function (d) { return d.key; })
+        .on("change", onChange)
+        .property("checked", true);
+        
+    createLabels.append("span")
+        .text(function (d) { return d.key; });
 }
