@@ -149,7 +149,7 @@ d3.csv("tbl01-en.csv", type, function (error, data) {
         // Variable that will contain selected provinces/territories with selected category
         var selectedDataSet = [];
 
-        d3.select("form").selectAll('input[type="radio"]').each(function (d) {
+        d3.select(".donut-labels").selectAll('input[type="radio"]').each(function (d) {
             r = d3.select(this);
             // If the checkbox is selected
             if (r.property("checked")) {
