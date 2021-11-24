@@ -57,7 +57,7 @@ svg.append("g").attr({["aria-label"]: "Legend", class: "legend", transform: "tra
 
 var path = svg.select(".slices").selectAll("path");
 
-d3.csv("http://workzone/WET4/development/qtt972/d3-visualisation/tbl01-en.csv", type, function (error, data) {
+d3.csv("tbl01-en.csv", type, function (error, data) {
     if (error) throw error;
 
     /*  
