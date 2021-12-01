@@ -509,4 +509,4 @@ $('div.d3-chart').once('dataviz').each( function(index, element) {
       return tableContext;
     }
   }
-}
+});
