@@ -26,16 +26,6 @@
       instances[index] = 'bar';
     }
 
-    /**
-     * Init corresponding DataTable
-     */
-    var table = $('table#' + placeholderName + ':not(.dataTable)').DataTable({
-      dom: 'B',
-      paging: false,
-      sort: false,
-      buttons: [ 'colvis' ]
-    });
-
     // Get table data
     chartDataStore[index] = [];
     chartDataStore[index]['header'] = getTableData('header', params[index]);
