@@ -7,7 +7,7 @@
   var params = [];
   var classArray = [];
 
-  $('div.d3-chart').once('dataviz').each( function(index, element) {
+  $('div.d3-chart').each( function(index, element) {
     /**
      * Get attributes from chart placeholder
      */
@@ -77,7 +77,7 @@
     /**
      * Filter charts based on checkbox interaction
      */
-    $('.chart-filters').once('dataviz-filters').each( function(index, element) {
+    $('.chart-filters').each( function(index, element) {
       $(this).find(':checkbox').change(function() {
         var chartRef = $(this).data("chart");
         var newChartData = manipulateChartData(chartRef);
