@@ -1,16 +1,19 @@
 // TODO: Confirm if we need to use the latest version of D3 (preferably. yes). if we need to use the latest version, will need to convert this code
 // TODO: Responsive design
+// TODO: Optimize the code and change the name of the classes
 var width = 650,
     height = 600,
     margin = 50,
     radius = Math.min(width, height) / 2 - margin;
 
+// Creating an invisible div that contains the custom pattern that we'll use
 var pattern = d3.select(".donut-chart")
     .append("div")
-    .attr({class: "donut-pattern", height: "0"});
+    .attr({class: "chart-pattern", height: "0"});
 
 // May have to change the color scheme, but it's for testing purpose
 // used this palette : https://projects.susielu.com/viz-palette
+// This https://fossheim.io/writing/posts/accessible-dataviz-d3-intro/ recommend to not put too much pattern as it can be too busy on the eyes
 createPattern("circle-1", "circle", "#ffd700", "#fff", 2);
 createPattern("dots-1", "dots", "#ffb14e", "#fff", 3);
 createPattern("horizontal-stripe-1", "horizontal-stripe", "#fa8775", "#fff");
@@ -19,20 +22,22 @@ createPattern("diagonal-stripe-2", "diagonal-stripe", "#cd34b5", "#fff", 3);
 createPattern("vertical-stripe-1", "vertical-stripe", "#9d02d7", "#fff");
 createPattern("crosshatch-1", "crosshatch", "#0000ff", "#fff", 0.5, 8, 8);
 
+// Arrays of range to reuse
+var range = [
+    "url(#circle-1)", "#ffd700", 
+    "url(#dots-1)", "#ffb14e", 
+    "url(#horizontal-stripe-1)", "#fa8775", 
+    "url(#diagonal-stripe-1)", "#ea5f94",
+    "url(#diagonal-stripe-2)", "#cd34b5",
+    "url(#vertical-stripe-1)", "#9d02d7", 
+    "url(#crosshatch-1)", "#0000ff"
+]
 // Called a mixed of color and pattern
 // Kept the same 7 colors, but added pattern to each repeating color, may have to be changed
-var color = d3.scale.ordinal().range(
-    [
-        "url(#circle-1)", "#ffd700", 
-        "url(#dots-1)", "#ffb14e", 
-        "url(#horizontal-stripe-1)", "#fa8775", 
-        "url(#diagonal-stripe-1)", "#ea5f94",
-        "url(#diagonal-stripe-2)", "#cd34b5",
-        "url(#vertical-stripe-1)", "#9d02d7", 
-        "url(#crosshatch-1)", "#0000ff"
-    ]);
+var color = d3.scale.ordinal().range(range);
 
-// Creating the pie
+/* START - Creating the pie 
+   Used this as a reference: https://bl.ocks.org/mbostock/5682158 */
 var pie = d3.layout.pie()
     .value(function (d) { return d.value; })
     .sort(null);
@@ -56,10 +61,37 @@ svg.append("g").attr({["aria-label"]: "Total", class: "label-total"});
 svg.append("g").attr({["aria-label"]: "Legend", class: "legend", transform: "translate(" + (width / 2 - (margin * 2)) + ",-" + ((height / 2) - (margin * 2.50)) + ")"});
 
 var path = svg.select(".slices").selectAll("path");
+/* END - Pie Creation */
+
+/* START - Creating the Bar Chart*/
+var marginBar = {top: 30, right: 30, bottom: 70, left: 60},
+    widthBar = 960 - marginBar.left - marginBar.right,
+    heightBar = 500 - marginBar.top - marginBar.bottom;
+
+// Append the object to the class "donut-chart"
+var svgBar = d3.select(".donut-chart")
+    .append("svg")
+    .attr({width: (widthBar + marginBar.left + marginBar.right), height: (heightBar + marginBar.top + marginBar.bottom)})
+    .append("g")
+    .attr("transform", "translate(" + marginBar.left + "," + marginBar.top + ")");
+
+// Initialize the X axis
+var x = d3.scale.ordinal()
+    .rangeRoundBands([0, widthBar], .1, .3);
+
+var xAxis = svgBar.append("g")
+    .attr({class: "x-axis", transform: "translate(0," + heightBar + ")"});
+
+// Initialize the Y axis
+var y = d3.scale.linear()
+    .range([heightBar, 0]);
+
+var yAxis = svgBar.append("g")
+    .attr("class", "y-axis");
+/* END - Bar Chart Creation */
 
 d3.csv("tbl01-en.csv", type, function (error, data) {
     if (error) throw error;
-
     /*  
         STARTS TABLE
         Add a table,
@@ -106,7 +138,7 @@ d3.csv("tbl01-en.csv", type, function (error, data) {
             return d.value;
         });
     // END TABLE
-    
+
     // Had to rearrange the CSV in another form of array to be able to "nest" the data
     var newData = [];
     data.forEach(function (d) {
@@ -117,7 +149,6 @@ d3.csv("tbl01-en.csv", type, function (error, data) {
         newData.push({ name: d["Province or Territory"], category: "$202,801 or more", value: d["$202,801 or more"] });
         newData.push({ name: d["Province or Territory"], category: "All Brackets", value: d["All Brackets"] });
     });
-
     data = newData;
 
     // Nested categories, then the region, to be able to create 2 methos of selection
@@ -127,11 +158,14 @@ d3.csv("tbl01-en.csv", type, function (error, data) {
         .entries(data);
 
     // We are created the radio box, to select which category we want to see the data
-    createInput(allCategories, "radio", updateGraph, "categories");
-
+    // TODO: Text is probably temporary, only to differentiate the 2 form-group
+    createInput(allCategories, "radio", updateGraph, "categories", "input-categories");
+    d3.select(".input-categories").insert("p", ":first-child").append("strong").text("Select a category");
     // We created the checkbox to choose which region we want to show
     // TODO: Validate if it would be better to add the select tag instead of the checkbox
-    createInput(allCategories[0].values, "checkbox", updateGraph, "names");
+    // TODO: Text is probably temporary, only to differentiate the 2 form-group
+    createInput(allCategories[0].values, "checkbox", updateGraph, "names", "input-names");
+    d3.select(".input-names").insert("p", ":first-child").append("strong").text("Select a province and/or territory");
 
     // Create graph in screen
     updateGraph();
@@ -170,8 +204,7 @@ d3.csv("tbl01-en.csv", type, function (error, data) {
             data1 = pie(newDataSet);
 
         // We are creating the slice to the path
-        // TODO: Add pattern to be more accessible
-        // SEE: https://fossheim.io/writing/posts/accessible-dataviz-d3-intro/
+        // TODO: Add the data for one using screen reader, either on the path or legend (to see with Robin)
         path = path.data(data1, key);
 
         path.enter()
@@ -191,7 +224,6 @@ d3.csv("tbl01-en.csv", type, function (error, data) {
         path.transition()
             .duration(750)
             .attrTween("d", arcTween);
-
 
         // We will now calculate the total of each input selected and show it in the middle of the donut
         var total = 0;
@@ -215,7 +247,47 @@ d3.csv("tbl01-en.csv", type, function (error, data) {
                 }
             });
 
-        // We append the legend with the current information 
+        /* START BAR CHART */
+        // TODO: Doesn't work correctly right now, need to update
+        // Update the X axis
+        x.domain(newDataSet.map(function(d) { return d.name; }));
+        xAxis.call(d3.svg.axis().scale(x).orient("bottom"));
+
+        // Update the Y axis
+        y.domain([0, d3.max(newDataSet, function(d) { return d.value }) ]);
+        yAxis.transition()
+            .duration(750)
+            .call(d3.svg.axis().scale(y).orient("left"));
+        
+        svgBar
+            .selectAll(".tick text")
+            .attr("font-size", "10px")
+            .call(wrap, x.rangeBand());
+
+        svgBar.selectAll(".domain, .tick line")
+            .attr({fill: "none", stroke: "#000", ["shape-rendering"]: "crispEdges"});
+
+        svgBar.selectAll(".x-axis .domain").attr("display", "none");
+
+        // Append the bar
+        var u = svgBar.selectAll("rect").data(newDataSet);
+
+        u.enter()
+            .append("rect")
+            .transition()
+            .duration(750)
+            .attr({ x: function(d) { return x(d.name); }, 
+                    y: function(d) { return y(d.value);}, 
+                    width: x.rangeBand(), 
+                    height: function(d) { return heightBar - y(d.value)}, 
+                    fill: "#69b3a2" });
+        
+        // If less in the new dataset, we delete the ones not in use anymore
+        u.exit().remove()
+        /* END BAR CHART */
+
+        // We append the legend with the current information
+        // TODO: Add the data value for people using screen reader, either on the path or legend (to see with Robin)
         var legend = svg.select(".legend")
             .selectAll('.legend-entry')
             .data(newDataSet)
@@ -231,8 +303,6 @@ d3.csv("tbl01-en.csv", type, function (error, data) {
             .text(function (d) {
                 return d.name;
             });
-
-        // TODO: try to re-add the label, but may be with a tooltip this time ?
     }
 });
 
@@ -285,10 +355,10 @@ function arcTween(d) {
 }
 
 // Small function to generate the input, to avoid repeating ourself
-function createInput(data, type, onChange, name) {
+function createInput(data, type, onChange, name, className) {
     var createLabels = d3.select(".donut-labels")
         .append("div")
-        .attr("class", "form-group")
+        .attr("class", "form-group " + className)
         .selectAll("div")
         .data(data)
         .enter().append("div")
@@ -328,7 +398,7 @@ function createPattern(id, type, colorRect, colorType, weight = 1, width = 10, h
         typeAttr = {d: "M0 0L8 8ZM8 0L0 8Z", stroke: colorType, ["stroke-width"]: 1 * weight };
     }
 
-    var pattern = d3.select(".donut-pattern")
+    var pattern = d3.select(".chart-pattern")
         .append("svg")
         .attr({width: width, height: height, version: "1.1", xmlns: "http://www.w3.org/2000/svg"})
         .append("defs")
@@ -340,4 +410,28 @@ function createPattern(id, type, colorRect, colorType, weight = 1, width = 10, h
 
     pattern.append(type)
         .attr(typeAttr);
+}
+
+function wrap(text, width) {
+    text.each(function() {
+      var text = d3.select(this),
+          words = text.text().split(/\s+/).reverse(),
+          word,
+          line = [],
+          lineNumber = 0,
+          lineHeight = 1.1, // ems
+          y = text.attr("y"),
+          dy = parseFloat(text.attr("dy")),
+          tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
+      while (word = words.pop()) {
+        line.push(word);
+        tspan.text(line.join(" "));
+        if (tspan.node().getComputedTextLength() > width) {
+          line.pop();
+          tspan.text(line.join(" "));
+          line = [word];
+          tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+        }
+      }
+    });
 }
