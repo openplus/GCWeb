@@ -109,6 +109,27 @@
       return newData;
     }
 
+	/**
+	* Append an invisiable div to the first d3-chart, to add the SVG pattern
+	* For accessibility purpose
+	*/
+	var pattern = d3.select(".d3-chart", ":first-child")
+	.append("div")
+	.attr({class: "d3-pattern", height: "0", position: "absolute"});
+
+	/**
+	* May have to change the color scheme, but it's for testing purpose
+	* used this palette : https://projects.susielu.com/viz-palette
+	* This https://fossheim.io/writing/posts/accessible-dataviz-d3-intro/ recommend to not put too much pattern as it can be too busy on the eyes
+	*/
+	createPattern("circle-1", "circle", "#ffd700", "#fff", 1, 5, 5);
+	createPattern("dots-1", "dots", "#ffb14e", "#fff", 3);
+	createPattern("horizontal-stripe-1", "horizontal-stripe", "#fa8775", "#fff");
+	createPattern("diagonal-stripe-1", "diagonal-stripe", "#ea5f94", "#fff");
+	createPattern("diagonal-stripe-2", "diagonal-stripe", "#cd34b5", "#fff", 3);
+	createPattern("vertical-stripe-1", "vertical-stripe", "#9d02d7", "#fff");
+	createPattern("crosshatch-1", "crosshatch", "#0000ff", "#fff", 0.5, 8, 8);
+        
     /**
      * Init D3 pie chart
      */
@@ -286,9 +307,17 @@
 
       var labelKey = function(d){ return d.data.label; };
 
-      var color = d3.scale.ordinal()
-        .domain(chartDataStore[instance]['header'])
-        .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+	  var color = d3.scale.ordinal()
+	  .domain(chartDataStore[instance]['header'])
+	  .range([
+	      "url(#circle-1)", "#ffd700", 
+		  "url(#dots-1)", "#ffb14e", 
+		  "url(#horizontal-stripe-1)", "#fa8775", 
+		  "url(#diagonal-stripe-1)", "#ea5f94",
+		  "url(#diagonal-stripe-2)", "#cd34b5",
+		  "url(#vertical-stripe-1)", "#9d02d7", 
+		  "url(#crosshatch-1)", "#0000ff"
+		]);
 
       var arc = d3.svg.arc()
         .outerRadius(radius * 0.8)
@@ -307,6 +336,8 @@
       slice.enter()
         .insert("path")
         .style("fill", function(d) { return color(d.data.label); })
+		.attr("stroke", "white")
+        .attr("stroke-width", 1)
         .attr("class", "slice")
         .attr("title", function(d) { return d.data.label; });
 
@@ -500,5 +531,44 @@
         return tableContext;
       }
     }
+	  
+	/**
+	* Function to create pattern directly into JS
+	*/
+	function createPattern(id, type, colorRect, colorType, weight = 1, width = 10, height = 10) {
+		var typeAttr;
+
+		if(type == "dots") {
+			type = "rect";
+			typeAttr = {width: 1 * weight, height: 1 * weight, fill: colorType};
+		} else if(type == "horizontal-stripe") {
+			type = "rect";
+			typeAttr = {width: 1 * weight, height: 10, fill: colorType};
+		} else if(type == "diagonal-stripe") {
+			type = "path";
+			typeAttr = {d: "M-1,1 l2,-2            M0,10 l10,-10            M9,11 l2,-2", stroke: colorType, ["stroke-width"]: 1 * weight };
+		} else if(type == "vertical-stripe") {
+			type = "rect";
+			typeAttr = {width: 10, height: 1 * weight, fill: colorType};
+		} else if(type == "circle") {
+			typeAttr = {cx: 1 * weight, cy: 1 * weight, r: 1 * weight, fill: colorType};
+		} else if(type == "crosshatch") {
+			type = "path";
+			typeAttr = {d: "M0 0L8 8ZM8 0L0 8Z", stroke: colorType, ["stroke-width"]: 1 * weight };
+		}
+
+		var pattern = d3.select(".d3-pattern")
+		.append("svg")
+		.attr({width: width, height: height, version: "1.1", xmlns: "http://www.w3.org/2000/svg"})
+		.append("defs")
+		.append("pattern")
+		.attr({id: id, width: width, height: height, patternUnits: "userSpaceOnUse"});
+
+		pattern.append("rect")
+		.attr({width: width, height: height, fill: colorRect});
+
+		pattern.append(type)
+		.attr(typeAttr);
+	}
   });
 })(jQuery);
