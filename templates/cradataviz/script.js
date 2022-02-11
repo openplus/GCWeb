@@ -59,12 +59,12 @@
             d3.text(placeholderTag.attributes.href.nodeValue).get(function(e, r) {
                 var data = d3.csv.parse(r);
                 chartDataStore[index]['header'] = [];
-                chartDataStore[index]['data'] = [];
+                chartDataStore[index]['data'] = [[]];
 
                 // TODO: Personalize the content depending on the CSV file/and the
                 data.forEach(function (d, i) {
                     chartDataStore[index]['header'].push(d["Province or Territory"]);
-                    chartDataStore[index]['data'].push(d["$45,916 or less"]);
+                    chartDataStore[index]['data'][0].push(d["$45,916 or less"]);
                 });
                 
                 buildChart(data);
@@ -282,7 +282,7 @@
             var height = 700 - margin.top - margin.bottom,
                 width = 1140 - margin.left - margin.right,
                 barWidth = 65;
-            
+
             var yScale = d3.scale.linear()
                 .domain([0, Math.max.apply(Math, chartData)])
                 .range([0, height])
