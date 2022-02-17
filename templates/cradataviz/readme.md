@@ -9,7 +9,7 @@ TO-DO: Areas needed updates:
 - OTHER:
  - Pop-up/Hover on Donut
  - Donut data value Total in center (Magda what is the data?)
- - Table filtering also
+ - Table filtering also: Might be some newer HTML5 options: https://wet-boew.github.io/GCWeb/components/wb-data-json/template-en.html
 
 
 Recently DONE:
