@@ -240,7 +240,6 @@
                 }
             });
 
-            
             var newData = [];
                 newData['header'] = newHeader;
                 newData['data'] = newRowData;
@@ -493,12 +492,6 @@
                 .attr("y", -margin.left + 20)
                 .attr("x", -height / 2)
                 .text("Y axis title")
-
-            // bars.exit()
-            //     .remove();
-
-            // svg[instance].select(".bars").selectAll('text').data(chartData)
-            //     .exit().remove();
         }
         
         /**
