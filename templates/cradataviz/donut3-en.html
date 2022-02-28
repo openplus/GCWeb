@@ -1,0 +1,52 @@
+---
+{
+	"title": "Taxable Income by Province or Territory and Tax Bracket",
+	"language": "en",
+	"altLangPrefix": "donut",
+	"altLangPage": "donut3-fr.html",
+	"pageclass": "cnt-wdth",
+	"breadcrumb": [
+		{ "title": "Canada.ca", "link": "https://www.canada.ca/en.html" }
+	],
+	"secondlevel": false,
+	"dateModified": "2022-02-28",
+	"share": "true"
+}
+---
+{% include components/inc-byline.html %}
+
+<link rel="stylesheet" href="style.css" />
+<p>Below are interactive data visualizations, a table below will also render the data. The source content is available as structured dataset at the base of this page.</p>
+			
+<div class="row">
+    <div class="col-md-4 brdr-tp brdr-rght brdr-bttm brdr-lft hght-inhrt">
+        <h2 class="h4">Data Filters</h2>
+        <p>Select data filters below to apply dynamic changes to visualizations and table.</p>
+        <div class="d3-filters"></div>
+    </div>
+    <div class="col-md-8">
+        <h2 class="h4">Donut Chart</h2>
+        <p>This donut chart represents provincial tax bracket information. The value in the center of the chart consists of the brakets total for all selected provinces.</p>
+        <p><span class="label label-primary">TIP: Click a value segment of the chart to see more information</span></p>
+        <div class="d3-chart d3-pie" id="my-dataviz-pie-1" data-name="my-csv" data-params='{"column_name":"$142,353 - $202,800","multiple_filters":"true","multiple_columns":"true","header":"Province or Territory","exclude_row":"All Canada"}'></div>
+    </div>
+</div>
+<h2 class="h4">Bar Chart</h2>
+<p>This bar chart represents provincial tax bracket information. The values adjust to reflect the data filters, and correlate to other charts and data table.</p>
+<p><span class="label label-primary">TIP: Click a value segment of the chart to see more information</span></p>
+
+<div class="d3-chart d3-bar" id="my-dataviz-bar-1" data-name="my-csv" data-params='{"column_name":"$142,353 - $202,800","multiple_filters":"true","multiple_columns":"true","header":"Province or Territory","exclude_row":"All Canada"}'></div>
+
+<h2 class="h4">Data Table</h2>
+<p>This table represents provincial tax bracket information. The values adjust to reflect the data filters, and correlate to other charts and data table. You can download the source dataset referenced below.</p>
+<div class="d3-chart d3-table" id="my-dataviz-table-1" data-name="my-csv" data-params='{"header":"Province or Territory"}'></div>
+
+<!-- Download link CSV -->
+<h2>Download links/Source Data</h2>
+<div class="well">
+    <a id="my-csv" title="Taxable Income by Province or Territory and Tax Bracket" href="tbl02-en.csv">Document title (CSV, 273 KB)</a>
+</div>
+
+<script src="https://d3js.org/d3.v3.min.js"></script>
+<script src="jquery.min.js"></script>
+<script src="script.js"></script>
