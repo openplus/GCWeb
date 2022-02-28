@@ -44,5 +44,3 @@ To be revisited :
 https://openplus.github.io/GCWeb/templates/cradataviz/donut5-en.html
 https://openplus.github.io/GCWeb/templates/cradataviz/donut6-en.html
 https://openplus.github.io/GCWeb/templates/cradataviz/donut7-en.html
-
-For now, this is what I think is left to do. If there is anything, just let me know
