@@ -19,12 +19,12 @@ Catherine:
 - Linked the two charts together (the bar chart and the donut chart)
 - When you move the cursor over the donut chart, the data now follows the mouse
 - I made the 6 mocks-up requested (Files found from the Figma I received from Robin Galipeau):
-· https://openplus.github.io/GCWeb/templates/cradataviz/donut2-en.html  
-· https://openplus.github.io/GCWeb/templates/cradataviz/donut3-en.html
-· https://openplus.github.io/GCWeb/templates/cradataviz/donut4-en.html
-· https://openplus.github.io/GCWeb/templates/cradataviz/donut5-en.html
-· https://openplus.github.io/GCWeb/templates/cradataviz/donut6-en.html
-· https://openplus.github.io/GCWeb/templates/cradataviz/donut7-en.html
+https://openplus.github.io/GCWeb/templates/cradataviz/donut2-en.html  
+https://openplus.github.io/GCWeb/templates/cradataviz/donut3-en.html
+https://openplus.github.io/GCWeb/templates/cradataviz/donut4-en.html
+https://openplus.github.io/GCWeb/templates/cradataviz/donut5-en.html
+https://openplus.github.io/GCWeb/templates/cradataviz/donut6-en.html
+https://openplus.github.io/GCWeb/templates/cradataviz/donut7-en.html
 
 - The width of the tables has been corrected
 - In the template made by Steve, he had added a figure/figure caption around the charts, taken from the table caption (see the example: https://openplus.github.io/GCWeb/templates/cradataviz/donut1-en.html  this example takes the information in the table, instead of a CSV file), I added this possibility with the CSV files
