@@ -41,9 +41,8 @@ What remains to be done: (although I think we are ready for a team to review des
 
 To be revisited :
 - Some CSV files were way too complicated, so I had to simplify them. If these files are to be used in their complex form, I'll have to add some features. Here are the three pages where I had to simplify the files:
-
-· https://openplus.github.io/GCWeb/templates/cradataviz/donut5-en.html
-· https://openplus.github.io/GCWeb/templates/cradataviz/donut6-en.html
-· https://openplus.github.io/GCWeb/templates/cradataviz/donut7-en.html
+https://openplus.github.io/GCWeb/templates/cradataviz/donut5-en.html
+https://openplus.github.io/GCWeb/templates/cradataviz/donut6-en.html
+https://openplus.github.io/GCWeb/templates/cradataviz/donut7-en.html
 
 For now, this is what I think is left to do. If there is anything, just let me know
