@@ -33,6 +33,7 @@ https://openplus.github.io/GCWeb/templates/cradataviz/donut7-en.html
 What remains to be done: (although I think we are ready for a team to review design, UX and WCAG now)
 - Make $ formating where appropiate (re: donut)
 - Review mobile Table horizontol scroll
+- Add Breadcrumbs from Figma
 - Bar chart small text (alternatives?)
 - Make the French version
 - I have to ask Robin Galipeau to specify this: Labels: We need to add labels and descriptions (re: not sure what data it is representing), maybe some in panels/wells? (According to the readme: https://github.com/openplus/GCWeb/tree/master/templates/cradataviz )
