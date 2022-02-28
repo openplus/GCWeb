@@ -1,0 +1,25 @@
+.bars rect {
+    transition: fill 350ms;
+}
+
+.slice {
+    stroke: white;
+    stroke-width: 1px;
+}
+
+.slice.slice-hover {
+    filter: brightness(1.0);
+    transition: filter 350ms;
+}
+
+.slice.slice-hover:hover {
+    filter: brightness(0.8);
+}
+
+.d3-chart .tooltip {
+    pointer-events: none;
+}
+
+/* .grid-x .tick, .grid-y .tick {
+    transition: 500ms;
+} */
