@@ -94,39 +94,6 @@
                 excludeRow = params[index]["exclude_row"],
                 excludeColumn = params[index]["exclude_column"];
 
-            // d3.text(placeholderTag.attributes.href.nodeValue).get(function(e, r) {
-            //     var data = d3.csv.parse(r);
-            //         chartDataStore[index]['header'] = [];
-            //         chartDataStore[index]['data'] = [];
-            //         chartDataStore[index]['category'] = [];
-
-            //     /**
-            //     *  @todo Personalize the content depending on the CSV file/and the
-            //     */
-            //     data.forEach(function (d, i) {
-            //         chartDataStore[index]['header'].push(d[headerName]);
-            //         // chartDataStore[index]['data'][0].push(d[columnName]);
-            //         var keys = Object.keys(d);
-            //         for (var j = 0; j < keys.length; j++) {
-            //             var e = keys[j];
-                        
-            //             if(e !== headerName) {
-            //                 if(i == 0) {
-            //                     chartDataStore[index]['category'].push(e);
-            //                     chartDataStore[index]['data'].push([]);
-            //                 }
-            //                 chartDataStore[index]['data'][j-1].push(d[e]);
-            //             }
-            //         }
-                    
-            //     });
-
-            //     buildRadioArray(index);
-            //     buildCheckBoxArray(index);
-            //     buildChart(data, index);
-                
-            // });
-
             d3.csv(placeholderTag.attributes.href.nodeValue, function(data) {
                 // var data = d3.csv.parse(r);
                     chartDataStore[index]['header'] = [];
@@ -506,17 +473,20 @@
         
         var chart = svg[instance].select(".bars");
         
-        svg[instance].select(".bars").selectAll('.bar').remove();
+        // svg[instance].select(".bars").selectAll('.bar').remove();
 
-        var bars = chart.selectAll('.bar').data(chartData, function(d) { return d; });
+        var bars = chart.selectAll('.bar').data(chartData);
+
+        
         var barsEnter = bars.enter()
             .append('g')
             .attr('class', 'bar')
             .attr('transform', function(d, i) {
                 return 'translate(' + xScale(i) + ', ' + (height - yScale(d)) + ')';
             })
-            // .style("fill-opacity", 0);
+            .style("fill-opacity", 0);
 
+        
         barsEnter.append('rect')
             .style('fill', '#69b3a2')
             .attr('width', barWidth)
@@ -544,46 +514,42 @@
                 return d; 
             });
 
-        // var barsUpdate = bars
-        //     // .transition().duration(750)
-        //     .attr('transform', function(d, i) {
-        //         return 'translate(' + xScale(i) + ', ' + (height - yScale(d)) + ')';
-        //     })
-        //     .style("fill-opacity", 1);
+        var barsUpdate = bars
+            .transition().duration(750)
+            .attr('transform', function(d, i) {
+                return 'translate(' + xScale(i) + ', ' + (height - yScale(d)) + ')';
+            })
+            .style("fill-opacity", 1);
         
-        // barsUpdate.select('rect')
-        //     .attr('width', barWidth)
-        //     .attr('height', function (d) {
-        //         return yScale(d);
-        //     })
+        barsUpdate.select('rect')
+            .attr('width', barWidth)
+            .attr('height', function (d) {
+                return yScale(d);
+            })
         
-        // barsUpdate.select('text')
-        //     .attr("x", barWidth / 2)
-        //     .text(function(d) { 
-        //         return d; 
-        //     });
-        
-        // var barExit = bars.exit()
-            // .transition().duration(750)
-            // .attr('transform', function(d, i) {
-            //     return 'translate(' + xScale(i) + ', ' + (height - yScale(d)) + ')';
-            // })
-            // .style("fill-opacity", 0)
-            // .remove();
+        barsUpdate.select('text')
+            .attr("x", barWidth / 2)
+            .text(function(d) { 
+                return d; 
+            });
 
-        // barExit.select("rect")
-        //     .attr('width', barWidth)
-        //     .attr('height', function (d) {
-        //         return yScale(d);
-        //     })
+        var barExit = bars.exit()
+            .transition().duration(750)
+            .style("fill-opacity", 0)
+            .remove();
+
+        barExit.select("rect")
+            .attr('width', barWidth)
+            .attr('height', function (d) {
+                return yScale(d);
+            })
       
-        // barExit.select("text")
-        //     .attr("x", barWidth / 2)
-        //     .text(function(d) { 
-        //         return d; 
-        //     });
-      
-        
+        barExit.select("text")
+            .attr("x", barWidth / 2)
+            .text(function(d) { 
+                return d; 
+            });
+
         var verticalGuideScale = d3.scale.linear()
             .domain([0, Math.max.apply(Math, chartData)])
             .range([height, 0])
@@ -593,9 +559,9 @@
             .orient('left')
             .ticks(10)
         
-        var verticalGuide = svg[instance].select(".grid-y");
+        var verticalGuide = svg[instance].select(".grid-y").transition().duration(750);
         vAxis(verticalGuide)
-        verticalGuide.attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')')
+        svg[instance].select(".grid-y").attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')')
         verticalGuide.selectAll('path')
             .style({fill: 'none', stroke: "#000"})
         verticalGuide.selectAll('line')
@@ -606,24 +572,19 @@
             .orient('bottom')
             .ticks(chartData.size)
         
-        var horizontalGuide = svg[instance].select(".grid-x");
+        var horizontalGuide = svg[instance].select(".grid-x").transition().duration(750);
         hAxis(horizontalGuide)
-        horizontalGuide.attr('transform', 'translate(' + margin.left + ', ' + (height + margin.top) + ')')
+        svg[instance].select(".grid-x").attr('transform', 'translate(' + margin.left + ', ' + (height + margin.top) + ')')
         horizontalGuide.selectAll('path')
             .style({fill: 'none', stroke: "#000"})
         horizontalGuide.selectAll('line')
             .style({stroke: "#000"});
-
-        horizontalGuide.transition().duration(750).select(".grid-x")
-            .call(hAxis);
         
         // Rotate X axis labels
         svg[instance].select(".grid-x").selectAll(".tick text")
             .attr("font-size", "13px")
             .call(wrap, xScale.rangeBand());
 
-
-        
         // Axis titles
         var gridYremove = svg[instance].select(".grid-y").selectAll(".title").remove();
         var gridXremove = svg[instance].select(".grid-x").selectAll(".title").remove();
@@ -648,6 +609,7 @@
             .attr("y", -margin.left + 20)
             .attr("x", -height / 2)
             .text("Y axis title")
+
     }
     /**
     * Prepare table data for plotting.
