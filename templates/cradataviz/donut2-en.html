@@ -19,27 +19,27 @@
 <p>Below are interactive data visualizations, a table below will also render the data. The source content is available as structured dataset at the base of this page.</p>
 
 <div class="row">
-    <div class="col-md-4 brdr-tp brdr-rght brdr-bttm brdr-lft hght-inhrt">
-        <h2 class="h4">Data Filters</h2>
-        <p>Select data filters below to apply dynamic changes to visualizations and table.</p>
-        <div class="d3-filters"></div>
-    </div>
-    <div class="col-md-8">
-        <h2 class="h4">Donut Chart</h2>
-        <p>This donut chart represents provincial tax bracket information. The value in the center of the chart consists of the brakets total for all selected provinces.</p>
-        <p><span class="label label-primary">TIP: Click a value segment of the chart to see more information</span></p>
-        <div class="d3-chart d3-pie" id="my-dataviz-pie-1" data-name="my-csv" data-params='{"column_name":"$45,916 or less","header":"Province or Territory"}'></div>
-    </div>
+	<div class="col-md-4 brdr-tp brdr-rght brdr-bttm brdr-lft hght-inhrt">
+		<h2 class="h4">Data Filters</h2>
+		<p>Select data filters below to apply dynamic changes to visualizations and table.</p>
+		<div class="d3-filters"></div>
+	</div>
+	<div class="col-md-8">
+		<h2 class="h4">Donut Chart</h2>
+		<p>This donut chart represents provincial tax bracket information. The value in the center of the chart consists of the brakets total for all selected provinces.</p>
+		<p><span class="label label-primary">TIP: Click a value segment of the chart to see more information</span></p>
+		<div class="d3-chart d3-pie" id="my-dataviz-pie-1" data-name="my-csv" data-params='{"column_name":"$45,916 or less","header":"Province or Territory", "format":","}'></div>
+	</div>
 </div>
 <h2 class="h4">Bar Chart</h2>
 <p>This bar chart represents provincial tax bracket information. The values adjust to reflect the data filters, and correlate to other charts and data table.</p>
 <p><span class="label label-primary">TIP: Click a value segment of the chart to see more information</span></p>
 
-<div class="d3-chart d3-bar" id="my-dataviz-bar-1" data-name="my-csv" data-params='{"column_name":"$45,916 or less","header":"Province or Territory"}'></div>
+<div class="d3-chart d3-bar" id="my-dataviz-bar-1" data-name="my-csv" data-params='{"column_name":"$45,916 or less","header":"Province or Territory", "format":","}'></div>
 
 <h2 class="h4">Data Table</h2>
 <p>This table represents provincial tax bracket information. The values adjust to reflect the data filters, and correlate to other charts and data table. You can download the source dataset referenced below.</p>
-<div class="d3-chart d3-table" id="my-dataviz-table-1" data-name="my-csv" data-params='{"header":"Province or Territory"}'></div>
+<div class="d3-chart d3-table" id="my-dataviz-table-1" data-name="my-csv" data-params='{"header":"Province or Territory", "format":","}'></div>
 
 <!-- Download link CSV -->
 <h2>Download links/Source Data</h2>
