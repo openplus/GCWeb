@@ -6,10 +6,46 @@
     var placeholderId = [];
     var params = [];
     var classArray = [];
+    var lang = document.documentElement.lang;
+
+    /**
+     * Set the locale of D3 depending the language of the page
+     * @see https://github.com/d3/d3-3.x-api-reference/blob/master/Localization.md#d3_locale
+     */
+    var localeEN = {
+        "decimal": ".",
+        "thousands": ",",
+        "grouping": [3],
+        "currency": ["$", ""],
+        "dateTime": "%a %b %e %X %Y",
+        "date": "%m/%d/%Y",
+        "time": "%H:%M:%S",
+        "periods": ["AM", "PM"],
+        "days": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+        "shortDays": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+        "months": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+        "shortMonths": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    }
+
+    var localeFR = {
+        "decimal": ",",
+        "thousands": "\u00a0",
+        "grouping": [3],
+        "currency": ["", " $"],
+        "dateTime": "%a %b %e %X %Y",
+        "date": "%d/%m/%Y",
+        "time": "%H:%M:%S",
+        "periods": ["AM", "PM"],
+        "days": ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredri", "Samedi"],
+        "shortDays": ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"],
+        "months": ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"],
+        "shortMonths": ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Aoû", "Sep", "Oct", "Nov", "Dec"]
+    }
+
+    var locale = d3.locale(lang == 'en' ? localeEN : localeFR);
     
     /**
     * Append an invisiable div to the first d3-chart, to add the SVG pattern
-    * For accessibility purpose
     */
     var pattern = d3.select(".d3-chart", ":first-child")
         .append("div")
@@ -34,9 +70,6 @@
     createPattern("vertical-stripe-1", "vertical-stripe", "#9d02d7", "#fff");
     createPattern("crosshatch-1", "crosshatch", "#0000ff", "#fff", 0.5, 8, 8);
     
-    
-    // getCSV(d3PlaceholderTag, d3Params, 0);
-    
     $('div.d3-chart').each(function(index, element) {
         /**
         * Get attributes from chart placeholder
@@ -47,8 +80,9 @@
         var placeholderParams = this.attributes['data-params'].nodeValue;
             classArray[index] = placeholderClass.split(" ");
             params[index] = $.parseJSON(placeholderParams);
-        var placeholderTag = document.getElementById(placeholderName);
-        
+        var placeholderTag = document.getElementById(placeholderName),
+            formatOption = setFormat(index);
+
         // Store instances
         if ($.inArray('d3-pie', classArray[index]) > 0) {
             instances[index] = 'pie';
@@ -75,12 +109,6 @@
             $(this).wrap("<figure></figure>");
             $(this).before("<figcaption>" + tableCaption + " (" + tableContext + ")</figcaption>");
             
-            // // Add bootstrap classes to set layout on Pie charts
-            // if ($.inArray('d3-pie', classArray[index]) > 0) {
-            //     $(this).wrap("<div class='row'></div>");
-            //     $(this).addClass("col-md-9");
-            // 
-
             if(chartDataStore[index]['category'] != undefined) {
                 buildRadioArray(index);
             }
@@ -90,15 +118,13 @@
         } 
         else if(placeholderTag.tagName === 'A') {
             var headerName = params[index]["header"],
-                multipleColumns = params[index]["multiple_columns"],
                 excludeRow = params[index]["exclude_row"],
                 excludeColumn = params[index]["exclude_column"];
 
             d3.csv(placeholderTag.attributes.href.nodeValue, function(data) {
-                // var data = d3.csv.parse(r);
-                    chartDataStore[index]['header'] = [];
-                    chartDataStore[index]['data'] = [];
-                    chartDataStore[index]['category'] = [];
+                chartDataStore[index]['header'] = [];
+                chartDataStore[index]['data'] = [];
+                chartDataStore[index]['category'] = [];
 
                 data = data.filter(exclude);
 
@@ -111,7 +137,6 @@
                 */
                 data.forEach(function (d, i) {
                     chartDataStore[index]['header'].push(d[headerName]);
-                    // chartDataStore[index]['data'][0].push(d[columnName]);
                     var keys = Object.keys(d);
                     for (var j = 0; j < keys.length; j++) {
                         var e = keys[j];
@@ -126,9 +151,10 @@
                     }
                 });
 
+
                 buildRadioArray(index);
                 buildCheckBoxArray(index);
-                buildChart(data, index, placeholderName);
+                buildChart(data, index, placeholderName, formatOption);
             })
 
             /**
@@ -147,11 +173,34 @@
         
     });
     
+    /**
+     * Set the format of the numbers
+     * @see https://github.com/d3/d3-3.x-api-reference/blob/master/Formatting.md#d3_format
+     * @see https://github.com/d3/d3-3.x-api-reference/blob/master/Localization.md#d3_locale
+     * 
+     */
+    function setFormat(index) {
+        placeholderFormat = params[index]['format'],
+        format = placeholderFormat;
     
+        // if (placeholderFormat == "currency") {
+        //     format = "$,";
+        // } else if (placeholderFormat == "thousands") {
+        //     format = ",";
+        // }
+
+        if (placeholderFormat == undefined) {
+            format = "";
+        }
+
+        return format;
+    }
+
     function buildRadioArray(index) {
         /**
         * Build Radio array
         */
+       var formatOption = setFormat(index);
         var columnName = params[index]["column_name"],
             column = chartDataStore[index]['category'][0];
 
@@ -173,8 +222,6 @@
             $('.chart-radio').addClass("filter-radio-chart-" + index + "");
         }
         
-        // $(".chart-radio").html("<p><strong>Select a category</strong></p>");
-        
         if(index == 0) {
             $.each(chartDataStore[index]['category'], function(key, value) {
                 var radioLabel = value;
@@ -194,19 +241,18 @@
         * Filter charts based on checkbox interaction
         */
         // $('.chart-radio-filters').each(function(index, element) {
-
             // $(this).find(':radio').change(function() {
-            $('.chart-radio-filters').find(':radio').on('change', function() {
+            $('.chart-radio-filters').find(':radio').change(function() {
                 // var chartRef = $(this).data("chart");
                 var chartRef = index
                 var i = $(this).data("index");
                 var newChartData = manipulateRadioChartData(chartRef, i);
                 
                 if ($.inArray('d3-pie', classArray[index]) > 0) {
-                    changePieData(plotPieData(newChartData['header'], newChartData['data']), chartRef);
+                    changePieData(plotPieData(newChartData['header'], newChartData['data']), chartRef, formatOption);
                 }
                 else if ($.inArray('d3-bar', classArray[index]) > 0) {
-                    changeBarData(newChartData['header'], newChartData['data'], chartRef);
+                    changeBarData(newChartData['header'], newChartData['data'], chartRef, formatOption);
                 }
             });
         // });
@@ -216,6 +262,7 @@
         /**
         * Build checkbox array
         */
+        var formatOption = setFormat(index);
         var headerName = params[index]["header"];
 
        if(index == 0) {
@@ -240,11 +287,9 @@
             $.each( chartDataStore[index]['header'], function(key, value) {
                 var checkboxLabel = value;
                 var checkboxValue = value;
-                // var checkboxName = 'chart[' + index + '][' + key + ']';
                 var checkboxName = 'chart[' + index + '][' + key + ']';
                 var checkboxTemplate = '<div class="checkbox"><label><input data-chart="' + index + '" data-index="' + key + '" type="checkbox" name="' + checkboxName + '" value="' + checkboxValue + '" checked>' + checkboxLabel + "</label></div>";
                 
-                // $(".filter-checkbox-chart-" + index).append(checkboxTemplate);
                 $(".filter-checkbox-chart-" + index).append(checkboxTemplate);
             });
         }
@@ -254,16 +299,16 @@
         */
         // $('.chart-checkbox-filters').each( function(i, element) {
             // $(this).find(':checkbox').change(function() {
-            $('.chart-checkbox-filters').find(':checkbox').on('change', function() {
+            $('.chart-checkbox-filters').find(':checkbox').change(function() {
                 // var chartRef = $(this).data("chart");
                 var chartRef = index;
                 var newChartData = manipulateChartData(chartRef);
 
                 if ($.inArray('d3-pie', classArray[index]) > 0) {
-                    changePieData(plotPieData(newChartData['header'], newChartData['data']), chartRef);
+                    changePieData(plotPieData(newChartData['header'], newChartData['data']), chartRef, formatOption);
                 }
                 else if ($.inArray('d3-bar', classArray[index]) > 0) {
-                    changeBarData(newChartData['header'], newChartData['data'], chartRef);
+                    changeBarData(newChartData['header'], newChartData['data'], chartRef, formatOption);
                 }
             });
         // });
@@ -329,7 +374,9 @@
     /**
     * Function to build the chart
     */
-    function buildChart(data, index, placeholderName) {
+    function buildChart(data, index, placeholderName, formatOption) {
+        var format = locale.numberFormat(formatOption)
+
         /**
         * Init D3 pie chart
         */
@@ -354,7 +401,7 @@
             
             svg[index].attr("transform", "translate(120,120)");
             
-            changePieData(plotPieData(chartDataStore[index]['header'], chartDataStore[index]['data'][0]), index);
+            changePieData(plotPieData(chartDataStore[index]['header'], chartDataStore[index]['data'][0]), index, formatOption);
         }
         else if ($.inArray('d3-bar', classArray[index]) > 0) {
             /**
@@ -381,7 +428,7 @@
                 .attr("class", "bars")
                 .attr('transform', 'translate(' + margin.left + ', ' + (margin.top - 1) + ')');
             
-            changeBarData(chartHeader, chartData, index);
+            changeBarData(chartHeader, chartData, index, formatOption);
         }
         else if ($.inArray('d3-table', classArray[index]) > 0) {
             /**
@@ -430,7 +477,11 @@
                     return d.name;
                 })
                 .text(function (d) {
-                    return d.value;
+                    if(d.name != params[index]['header']) {
+                        return format(d.value);
+                    } else {
+                        return d.value;
+                    }
                 });
 
         }
@@ -439,7 +490,9 @@
     /**
     * Change data used in bar chart.
     */
-    function changeBarData(chartHeader, chartData, instance) {
+    function changeBarData(chartHeader, chartData, instance, formatOption) {
+        var format = locale.numberFormat(formatOption)
+
         var margin = {top: 30, right: 10, bottom: 80, left: 125}
         
         var height = 700 - margin.top - margin.bottom,
@@ -472,12 +525,8 @@
          */
         
         var chart = svg[instance].select(".bars");
-        
-        // svg[instance].select(".bars").selectAll('.bar').remove();
 
         var bars = chart.selectAll('.bar').data(chartData);
-
-        
         var barsEnter = bars.enter()
             .append('g')
             .attr('class', 'bar')
@@ -511,7 +560,7 @@
             .attr("x", barWidth / 2)
             .attr("y", "-5")
             .text(function(d) { 
-                return d; 
+                return format(d); 
             });
 
         var barsUpdate = bars
@@ -530,7 +579,7 @@
         barsUpdate.select('text')
             .attr("x", barWidth / 2)
             .text(function(d) { 
-                return d; 
+                return format(d); 
             });
 
         var barExit = bars.exit()
@@ -547,7 +596,7 @@
         barExit.select("text")
             .attr("x", barWidth / 2)
             .text(function(d) { 
-                return d; 
+                return format(d); 
             });
 
         var verticalGuideScale = d3.scale.linear()
@@ -557,6 +606,7 @@
         var vAxis = d3.svg.axis()
             .scale(verticalGuideScale)
             .orient('left')
+            .tickFormat(d3.format(formatOption))
             .ticks(10)
         
         var verticalGuide = svg[instance].select(".grid-y").transition().duration(750);
@@ -622,7 +672,9 @@
     /**
     * Change data used in pie chart.
     */
-    function changePieData(data, instance) {
+    function changePieData(data, instance, formatOption) {
+        var format = locale.numberFormat(formatOption)
+
         var width = 250,
             height = 250,
             radius = Math.min(width, height) / 2;
@@ -677,7 +729,6 @@
             .text(function (d) { return d.data.label; });
         
         slice
-
             .transition()
             .duration(750)
             .attrTween("d", function(d) {
@@ -701,7 +752,7 @@
         
         showTotal.append("text")
             .attr({dy: "0.35em", ["text-anchor"]: "middle"})
-            .text(total)
+            .text(format(total))
             .style({fill: "black", opacity: 1, ["font-size"]: 12});
         
         
@@ -748,7 +799,7 @@
             
             var mousemove = function(d) {
                 tooltips
-                    .html(d.data.label + ' (' + d.value + ')')
+                    .html(d.data.label + ' (' + format(d.value) + ')')
                     .style("left", Math.max(0, d3.event.layerX) + "px")
                     .style("top", (d3.event.layerY - 40) + "px");
             }
@@ -782,7 +833,7 @@
             
             chartLegend[instance].append("text")
                 .text(function(d){
-                    return d.data.label + " - " + d.data.value;
+                    return d.data.label + " - " + format(d.data.value);
                 })
                 .style("font-size", 10)
                 .attr("y", 8)
@@ -922,20 +973,9 @@
         }
     }
     /**
-    * Helpers to know if we hare using multiple filters or only one
-    * @todo If using multiple, give th epossibible to add the remaining filter anywhere else
-    * 
-    */
-    function getFiltersData(params) { 
-        var multipleFiltersData = params['multiple_filters'];
-        
-        if (multipleFiltersData == undefined || multipleFiltersData == 'false') {
-            return 0;
-        } else if (multipleFiltersData == 'true') {
-            return 1;
-        }
-    }
-
+     * Next fours fuctions are to animate and join the donut chart, as followed here:
+     * @see https://bl.ocks.org/mbostock/5682158
+     */
     function key(d) {
         return d.data.label; 
     }
@@ -1002,6 +1042,9 @@
     }
     /**
     * Function to create pattern directly into JS
+    * To create the patterns, I took example of this:
+    * @see https://iros.github.io/patternfills/sample_d3.html
+    * @see https://iros.github.io/patternfills/
     */
     function createPattern(id, type, colorRect, colorType, weight = 1, width = 10, height = 10) {
         var typeAttr;
