@@ -142,16 +142,19 @@
                     for (var j = 0; j < keys.length; j++) {
                         var e = keys[j];
 
-                        if(e !== headerName) {
+                        if(e !== headerName && columnName == undefined) {
                             if(i == 0) {
                                 chartDataStore[index]['category'].push(e);
                                 chartDataStore[index]['data'].push([]);
                             }
-                            if (e == columnName) {
-                                chartDataStore[index]['data'][0].push(d[e]);
-                            } else {
-                                chartDataStore[index]['data'][j-1].push(d[e]);
+                            chartDataStore[index]['data'][j-1].push(d[e]);
+
+                        } else if(e == columnName) {
+                            if(i == 0) {
+                                chartDataStore[index]['category'].push(e);
+                                chartDataStore[index]['data'].push([]);
                             }
+                            chartDataStore[index]['data'][0].push(d[e]);
                         }
                     }
                 });
@@ -421,7 +424,7 @@
                 .attr("class", "grid-y");
             svg[index].append('g')
                 .attr("class", "bars")
-                .attr('transform', 'translate(' + margin.left + ', ' + (margin.top - 1) + ')');
+                .attr('transform', 'translate(' + margin.left + ', ' + (margin.top) + ')');
             
             changeBarData(chartHeader, chartData, index, formatOption);
         }
