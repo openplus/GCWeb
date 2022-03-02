@@ -118,6 +118,7 @@
         } 
         else if(placeholderTag.tagName === 'A') {
             var headerName = params[index]["header"],
+                columnName = params[index]["column_name"],
                 excludeRow = params[index]["exclude_row"],
                 excludeColumn = params[index]["exclude_column"];
 
@@ -125,15 +126,15 @@
                 chartDataStore[index]['header'] = [];
                 chartDataStore[index]['data'] = [];
                 chartDataStore[index]['category'] = [];
-
+                
                 data = data.filter(exclude);
-
+                
                 function exclude(array) {
                     return array[headerName] != excludeRow;
                 }
 
                 /**
-                *  @todo Personalize the content depending on the CSV file/and the
+                *  @todo Personalize the content depending on the CSV file
                 */
                 data.forEach(function (d, i) {
                     chartDataStore[index]['header'].push(d[headerName]);
@@ -146,13 +147,18 @@
                                 chartDataStore[index]['category'].push(e);
                                 chartDataStore[index]['data'].push([]);
                             }
-                            chartDataStore[index]['data'][j-1].push(d[e]);
+                            if (e == columnName) {
+                                chartDataStore[index]['data'][0].push(d[e]);
+                            } else {
+                                chartDataStore[index]['data'][j-1].push(d[e]);
+                            }
                         }
                     }
                 });
 
-
-                buildRadioArray(index);
+                if(columnName == undefined) {
+                    buildRadioArray(index);
+                }
                 buildCheckBoxArray(index);
                 buildChart(data, index, placeholderName, formatOption);
             })
@@ -182,12 +188,6 @@
     function setFormat(index) {
         placeholderFormat = params[index]['format'],
         format = placeholderFormat;
-    
-        // if (placeholderFormat == "currency") {
-        //     format = "$,";
-        // } else if (placeholderFormat == "thousands") {
-        //     format = ",";
-        // }
 
         if (placeholderFormat == undefined) {
             format = "";
@@ -201,12 +201,7 @@
         * Build Radio array
         */
        var formatOption = setFormat(index);
-        var columnName = params[index]["column_name"],
-            column = chartDataStore[index]['category'][0];
-
-        if(columnName != undefined) {
-            column = columnName;
-        }
+        var column = chartDataStore[index]['category'][0];
 
         if(index == 0) {
             $(".d3-filters").append("<div class='form-group chart-radio chart-radio-filters'></div>");
@@ -543,16 +538,6 @@
                 return yScale(d);
             })
         
-        barsEnter.select('rect')
-            .on('mouseover', function (d) {
-                d3.select(this)
-                .style('fill', '#DE7552')
-            })
-            .on('mouseout', function (d) {
-                d3.select(this)
-                .style('fill', '#69b3a2')
-            });
-        
         barsEnter
             .append("text")
             .attr("text-anchor", "middle")
@@ -659,6 +644,53 @@
             .attr("y", -margin.left + 20)
             .attr("x", -height / 2)
             .text("Y axis title")
+
+        /** Testing this code:
+        * @see https://www.d3-graph-gallery.com/graph/interactivity_tooltip.html
+        */
+        // d3.select("#" + placeholderId[instance]).selectAll('.tooltip').remove();
+
+        // var tooltips = d3.select("#" + placeholderId[instance])
+        //     .style("position", "relative")
+        //     .append("div")
+        //     .attr('class', 'tooltip')
+        //     .style("background-color", "white")
+        //     .style("border", "solid")
+        //     .style("border-width", "1px")
+        //     .style("border-radius", "5px")
+        //     .style("padding", "5px")
+
+        // // Three function that change the tooltip when user hover / move / leave a cell
+        // var mouseover = function(d) {
+        //     tooltips
+        //         .style("opacity", 1)
+        // }
+
+        // var mousemove = function(d, i) {
+        //     tooltips
+        //         .html(chartHeader[i] + ' (' + format(d) + ')')
+        //         .style("left", Math.max(0, d3.event.layerX) + "px")
+        //         .style("top", (d3.event.layerY - 40) + "px");
+        // }
+        // var mouseleave = function(d) {
+        //     tooltips
+        //         .style("opacity", 0)
+        // }3
+
+        // barsEnter
+        //     .on("mouseover", mouseover)
+        //     .on("mousemove", mousemove)
+        //     .on("mouseleave", mouseleave)
+
+        barsEnter.select('rect')
+            .on('mouseover', function (d) {
+                d3.select(this)
+                .style('fill', '#DE7552')
+            })
+            .on('mouseout', function (d) {
+                d3.select(this)
+                .style('fill', '#69b3a2')
+            });
 
     }
     /**
@@ -779,9 +811,9 @@
             /** Testing this code:
             * @see https://www.d3-graph-gallery.com/graph/interactivity_tooltip.html
             */
-            d3.select(".d3-chart").selectAll('.tooltip').remove();
-            
-            var tooltips = d3.select(".d3-chart")
+            d3.select("#" + placeholderId[instance]).selectAll('.tooltip').remove();
+
+            var tooltips = d3.select("#" + placeholderId[instance])
                 .style("position", "relative")
                 .append("div")
                 .attr('class', 'tooltip')
