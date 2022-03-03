@@ -208,7 +208,11 @@
 
         if(index == 0) {
             $(".d3-filters").append("<div class='form-group chart-radio chart-radio-filters'></div>");
-            $(".chart-radio").html("<p><strong>Select a category</strong></p>");
+            if(lang == "en") {
+                $(".chart-radio").html("<p><strong>Select a category</strong></p>");
+            } else if (lang == "fr") {
+                $(".chart-radio").html("<p><strong>Sélectionner une catégorie</strong></p>");
+            }
         }
         
         if ($.inArray('d3-pie', classArray[index]) > 0) {
@@ -267,7 +271,11 @@
            $(".d3-filters").append("<div class='form-group chart-checkbox chart-checkbox-filters'></div>");
 
            if(headerName != undefined) {
-               $(".chart-checkbox").html("<p><strong>Select the " + headerName + "</strong></p>");
+               if(lang == "en") {
+                   $(".chart-checkbox").html("<p><strong>Select the " + headerName + "</strong></p>");
+                } else if(lang == "fr") {
+                    $(".chart-checkbox").html("<p><strong>Choisir un/une " + headerName + "</strong></p>");
+               }
            }
        }
 
