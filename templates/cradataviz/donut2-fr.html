@@ -1,0 +1,52 @@
+---
+{
+    "title": "Particuliers déclarants, par province ou territoire et par tranche d'imposition",
+    "language": "fr",
+    "altLangPrefix": "donut",
+    "altLangPage": "donut2-en.html",
+    "pageclass": "cnt-wdth",
+    "breadcrumb": [
+    { "title": "Canada.ca", "link": "https://www.canada.ca/en.html" }
+    ],
+    "secondlevel": false,
+    "dateModified": "2022-03-03",
+    "share": "true"
+}
+---
+{% include components/inc-byline.html %}
+
+<link rel="stylesheet" href="style.css" />
+<p>Vous trouverez ci-dessous des visualisations de données interactives, un tableau ci-dessous affichera également les données. Le contenu source est disponible sous forme d'ensemble de données structuré à la base de cette page.</p>
+
+<div class="row">
+    <div class="col-md-4 brdr-tp brdr-rght brdr-bttm brdr-lft hght-inhrt">
+        <h2 class="h4">Filtres de données</h2>
+        <p>Sélectionnez les filtres de données ci-dessous pour appliquer des modifications dynamiques aux visualisations et au tableau.</p>
+        <div class="d3-filters"></div>
+    </div>
+    <div class="col-md-8">
+        <h2 class="h4">Graphique en anneau</h2>
+        <p>Ce graphique en anneau représente les informations sur les tranches d'imposition provinciales. La valeur au centre du graphique correspond au total des parenthèses pour toutes les provinces sélectionnées.</p>
+        <p><span class="label label-primary">ASTUCE : Survolez un segment de graphique pour en voir plus</span></p>
+        <div class="d3-chart d3-pie" id="my-dataviz-pie-1" data-name="my-csv" data-params='{"header":"Province ou territoire", "format":","}'></div>
+    </div>
+</div>
+<h2 class="h4">Diagramme à bandes</h2>
+<p>Ce graphique à barres représente les informations sur les tranches d'imposition provinciales. Les valeurs s'ajustent pour refléter les filtres de données et sont en corrélation avec d'autres graphiques et tableaux de données.</p>
+<p><span class="label label-primary">ASTUCE : Survolez un segment de graphique pour en voir plus</span></p>
+
+<div class="d3-chart d3-bar" id="my-dataviz-bar-1" data-name="my-csv" data-params='{"header":"Province ou territoire", "format":","}'></div>
+
+<h2 class="h4">Tableaux de données</h2>
+<p>Ce tableau représente les informations sur les tranches d'imposition provinciales. Les valeurs s'ajustent pour refléter les filtres de données et sont en corrélation avec d'autres graphiques et tableaux de données. Vous pouvez télécharger le jeu de données source référencé ci-dessous.</p>
+<div class="d3-chart d3-table table-responsive" id="my-dataviz-table-1" data-name="my-csv" data-params='{"header":"Province ou territoire", "format":","}'></div>
+
+<!-- Download link CSV -->
+<h2>Télécharger le lien/Données sources</h2>
+<div class="well">
+    <a id="my-csv" title="Particuliers déclarants, par province ou territoire et par tranche d'imposition" href="tbl01-fr.csv">Titre du document (CSV, 273 Ko)</a>
+</div>
+
+<script src="https://d3js.org/d3.v3.min.js"></script>
+<script src="jquery.min.js"></script>
+<script src="script.js"></script>
