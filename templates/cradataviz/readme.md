@@ -28,17 +28,19 @@ https://openplus.github.io/GCWeb/templates/cradataviz/donut7-en.html
 
 - The width of the tables has been corrected
 - In the template made by Steve, he had added a figure/figure caption around the charts, taken from the table caption (see the example: https://openplus.github.io/GCWeb/templates/cradataviz/donut1-en.html  this example takes the information in the table, instead of a CSV file), I added this possibility with the CSV files
+- Make $ formating where appropiate (re: donut)
+- Review mobile Table horizontol scroll
+- Some more visual arrangements (transitions mostly, to follow some consistency)
 
 
 What remains to be done: (although I think we are ready for a team to review design, UX and WCAG now)
-- Make $ formating where appropiate (re: donut)
-- Review mobile Table horizontol scroll
+
 - Add Breadcrumbs from Figma
 - Bar chart small text (alternatives?)
 - Make the French version
 - I have to ask Robin Galipeau to specify this: Labels: We need to add labels and descriptions (re: not sure what data it is representing), maybe some in panels/wells? (According to the readme: https://github.com/openplus/GCWeb/tree/master/templates/cradataviz )
 - Give the possibility to choose colors by entering a parameter
-- Some more visual arrangements (transitions mostly, to follow some consistency)
+
 
 To be revisited :
 - Some CSV files were way too complicated, so I had to simplify them. If these files are to be used in their complex form, I'll have to add some features. Here are the three pages where I had to simplify the files:
