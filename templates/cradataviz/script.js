@@ -81,14 +81,17 @@
             classArray[index] = placeholderClass.split(" ");
             params[index] = $.parseJSON(placeholderParams);
         var placeholderTag = document.getElementById(placeholderName),
-            formatOption = setFormat(index);
+            formatOption = setFormat(index),
+            placeholderFigCaption;
 
         // Store instances
         if ($.inArray('d3-pie', classArray[index]) > 0) {
             instances[index] = 'pie';
+            placeholderFigCaption = "Donut Chart for ";
         }
         else if ($.inArray('d3-bar', classArray[index]) > 0) {
             instances[index] = 'bar';
+            placeholderFigCaption = "Bar Chart for ";
         }
         else if ($.inArray('d3-table', classArray[index]) > 0) {
             instances[index] = 'table';
@@ -107,7 +110,7 @@
             var tableCaption = $('table#' + placeholderName + ' caption').text();
             var tableContext = getTableData('context', params[index], placeholderName);
             $(this).wrap("<figure></figure>");
-            $(this).before("<figcaption>" + tableCaption + " (" + tableContext + ")</figcaption>");
+            $(this).before("<figcaption>" + placeholderFigCaption + tableCaption + " (" + tableContext + ")</figcaption>");
             
             if(chartDataStore[index]['category'] != undefined) {
                 buildRadioArray(index);
@@ -164,22 +167,24 @@
                 }
                 buildCheckBoxArray(index);
                 buildChart(data, index, placeholderName, formatOption);
-            })
-
+            })               
             /**
             * Wrap chart in figure with caption
             */
-            var csvCaption = $('#' + placeholderName + '').attr('title');
+            if ($.inArray('d3-pie', classArray[index]) > 0 || $.inArray('d3-bar', classArray[index]) > 0) {
+                $(this).wrap("<figure class='" + classArray[index][1] + "-fig'></figure>");
+            }
 
-            if(csvCaption != undefined && csvCaption != "") {
-                if ($.inArray('d3-pie', classArray[index]) > 0 || $.inArray('d3-bar', classArray[index]) > 0) {
-                    $(this).wrap("<figure></figure>");
-                    $(this).before("<figcaption>" + csvCaption + "</figcaption>");
+            if(columnName != undefined) {
+                var csvCaption = $('#' + placeholderName + '').attr('title');
+        
+                if(csvCaption != undefined && csvCaption != "") {
+                    if ($.inArray('d3-pie', classArray[index]) > 0 || $.inArray('d3-bar', classArray[index]) > 0) {
+                        $(this).before("<figcaption>" + placeholderFigCaption + csvCaption + " (" + columnName + ")</figcaption>");
+                    }
                 }
             }
-               
         }
-        
     });
     
     /**
@@ -203,7 +208,7 @@
         /**
         * Build Radio array
         */
-       var formatOption = setFormat(index);
+        var formatOption = setFormat(index);
         var column = chartDataStore[index]['category'][0];
 
         if(index == 0) {
@@ -249,7 +254,7 @@
                 var chartRef = index
                 var i = $(this).data("index");
                 var newChartData = manipulateRadioChartData(chartRef, i);
-                
+
                 if ($.inArray('d3-pie', classArray[index]) > 0) {
                     changePieData(plotPieData(newChartData['header'], newChartData['data']), chartRef, formatOption);
                 }
@@ -303,6 +308,8 @@
         /**
         * Filter charts based on checkbox interaction
         */
+
+
         // $('.chart-checkbox-filters').each( function(i, element) {
             // $(this).find(':checkbox').change(function() {
             $('.chart-checkbox-filters').find(':checkbox').change(function() {
@@ -381,7 +388,7 @@
     * Function to build the chart
     */
     function buildChart(data, index, placeholderName, formatOption) {
-        var format = locale.numberFormat(formatOption)
+        var format = locale.numberFormat(formatOption);
 
         /**
         * Init D3 pie chart
@@ -409,10 +416,10 @@
             
             changePieData(plotPieData(chartDataStore[index]['header'], chartDataStore[index]['data'][0]), index, formatOption);
         }
+        /**
+        * Init D3 bar chart
+        */
         else if ($.inArray('d3-bar', classArray[index]) > 0) {
-            /**
-            * Init D3 bar chart
-            */
             var chartHeader = chartDataStore[index]['header'];
             var chartData = chartDataStore[index]['data'][0];
 
@@ -436,15 +443,16 @@
             
             changeBarData(chartHeader, chartData, index, formatOption);
         }
+        /**
+        * Init D3 Table chart
+        */
         else if ($.inArray('d3-table', classArray[index]) > 0) {
-            /**
-            * Init D3 Table chart
-            */
             var csvCaption = $('#' + placeholderName + '').attr('title');
             
             var table = d3.select('.d3-table')
                 .append('table')
-                .attr("class", "wb-tables table table-striped table-hover");
+                .attr("class", "wb-tables table table-striped table-hover")
+                .attr("data-wb-tables", "{ \"ordering\" : false }");
 
             if(csvCaption != undefined && csvCaption != "") {
                 table.append('caption').text(csvCaption)
@@ -471,17 +479,28 @@
                 .selectAll('tr')
                 .data(data).enter()
                 .append('tr');
-            
-            rows.selectAll('td')
+
+            var rowsHeader = rows.selectAll('th')
+                .data(function(d) {
+                    return [d[params[index]['header']]];
+                })
+                .enter()
+                .append('th')
+                .attr('scope', 'row')
+                .text(function(d) {
+                    return d;
+                })
+
+            var rowsCells = rows.selectAll('td')
                 .data(function (d) {
-                    return titlesData.map(function (k) {
+                    return titlesData.filter(function(col) { return col != params[index]['header']}).map(function (k) {
                         return { 'value': d[k], 'name': k};
                     });
                 }).enter()
                 .append('td')
-                .attr('data-th', function (d) {
-                    return d.name;
-                })
+                // .attr('data-th', function (d) {
+                //     return d.name;
+                // })
                 .text(function (d) {
                     if(d.name != params[index]['header']) {
                         return format(d.value);
@@ -497,8 +516,30 @@
     * Change data used in bar chart.
     */
     function changeBarData(chartHeader, chartData, instance, formatOption) {
+        /**
+        * Wrap chart in figure with caption
+        */
+       var placeholderName = $(".d3-bar").attr('data-name');
+
+       if(document.getElementById(placeholderName).tagName === "A" && params[instance]['column_name'] == undefined) {
+           d3.select(".d3-bar-fig").selectAll("figcaption").remove();
+           var currentCategory = document.querySelector('input[type="radio"]:checked').value;
+   
+           var csvCaption = $('#' + placeholderName + '').attr('title');
+   
+           if(csvCaption != undefined && csvCaption != "") {
+               d3.select(".d3-bar-fig").insert("figcaption", ":first-child").text("Bar Chart for " + csvCaption + " (" + currentCategory + ")");
+           }
+       }
+
+        /**
+         * Add the possibility to format the numbers
+         */
         var format = locale.numberFormat(formatOption)
 
+        /**
+         * Start of the graphic
+         */
         var margin = {top: 30, right: 10, bottom: 80, left: 125}
         
         var height = 700 - margin.top - margin.bottom,
@@ -716,8 +757,29 @@
     * Change data used in pie chart.
     */
     function changePieData(data, instance, formatOption) {
+        /**
+        * Wrap chart in figure with caption
+        */
+         var placeholderName = $(".d3-pie").attr('data-name');
+         if(document.getElementById(placeholderName).tagName === "A" && params[instance]['column_name'] == undefined) {
+             d3.select(".d3-pie-fig").selectAll("figcaption").remove();
+             var currentCategory = document.querySelector('input[type="radio"]:checked').value;
+     
+             var csvCaption = $('#' + placeholderName + '').attr('title');
+     
+             if(csvCaption != undefined && csvCaption != "") {
+                 d3.select(".d3-pie-fig").insert("figcaption", ":first-child").text("Donut Chart for " + csvCaption + " (" + currentCategory + ")");
+             }
+         }
+ 
+         /**
+          * Add the possibility to format the numbers
+          */
         var format = locale.numberFormat(formatOption)
 
+        /**
+         * Start of the graphic
+         */
         var width = 250,
             height = 250,
             radius = Math.min(width, height) / 2;
