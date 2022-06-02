@@ -58,10 +58,129 @@
     * This @see https://fossheim.io/writing/posts/accessible-dataviz-d3-intro/ recommend to not put too much pattern as it can be too busy on the eyes
     * @todo Make multiple swatches so Author can chose which pattern and/or color they want
     */
-    // var patternFills = [{id: "circle", type: "circle"}, {id: "dots", type: "dots"}, {id: "horizontal-stripe", type: "horizontal-stripe"}, {id: "diagonal-stripe", type: "diagonal-stripe"}, {id: "vertical-stripe", type: "vertical-stripe"}, {id: "crosshatch", type: "crosshatch"}];
-    // var patternColors = {"palette-1": [{ color: "#ffd700", fill: "#fff"}, { color: "#ffb14e", fill: "#fff"}, { color: "#fa8775", fill: "#fff"}, { color: "#ea5f94", fill: "#fff"}, { color: "#cd34b5", fill: "#fff"}, { color: "#cd34b5", fill: "#fff"}, { color: "#9d02d7", fill: "#fff"}, { color: "#0000ff", fill: "#fff"}],
-    // "palette-2": [{ color: "#1b9e77", fill: "#fff"}, { color: "#d95f02", fill: "#fff"}, { color: "#7570b3", fill: "#fff"}, { color: "#e7298a", fill: "#fff"}, { color: "#66a61e", fill: "#fff"}, { color: "#e6ab02", fill: "#fff"}, { color: "#a6761d", fill: "#fff"}]};
-    
+
+    //  "color": {
+    //     1: "ffd700",
+    //     2: "ffb14e",
+    //     3: "fa8775",
+    //     4: "ea5f94",
+    //     5: "cd34b5",
+    //     6: "9d02d7",
+    //     7: "0000ff"
+    // },
+
+    // var palette14 = [
+    //         {
+    //             "id": "circle-1",
+    //             "type": "circle",
+    //             "color": "ffd700",
+    //             "fill": "fff",
+    //             "weight": 1,
+    //             "width": 5, 
+    //             "height": 5
+    //         },
+    //         {
+    //             "id": "dots-1",
+    //             "type": "dots",
+    //             "color": "ffb14e",
+    //             "fill": "fff",
+    //             "weight": 3,
+    //         },
+    //         {
+    //             "id": "horizontal-stripe-1",
+    //             "type": "horizontal-stripe",
+    //             "color": "fa8775",
+    //             "fill": "fff"
+    //         },
+    //         {
+    //             "id": "diagonal-stripe-1",
+    //             "type": "diagonal-stripe",
+    //             "color": "ea5f94",
+    //             "fill": "fff"
+    //         },
+    //         {
+    //             "id": "diagonal-stripe-2",
+    //             "type": "diagonal-stripe",
+    //             "color": "cd34b5",
+    //             "fill": "fff",
+    //             "weight": 3
+    //         },
+    //         {
+    //             "id": "vertical-stripe-1",
+    //             "type": "vertical-stripe",
+    //             "color": "9d02d7",
+    //             "fill": "fff"
+    //         },
+    //         {
+    //             "id": "crosshatch-1",
+    //             "type": "crosshatch",
+    //             "color": "0000ff",
+    //             "fill": "fff",
+    //             "weight": 0.5,
+    //             "width": 8, 
+    //             "height": 8
+    //         }
+    //     ];
+
+    // "color": {
+    //     2: "ff0000",
+    //     3: "ffa500",
+    //     4: "ffff00",
+    //     6: "800080",
+    //     7: "ff00ff",
+    //     8: "00ff00",
+    //     11: "0000ff",
+    //     12: "00ffff",
+    //     13: "008080",
+    //     14: "c0c0c0"
+    // },
+
+    // var palette15 = 
+    //         [{
+    //             "id": "circle-1",
+    //             "type": "circle",
+    //             "color": "800000",
+    //             "fill": "fff",
+    //             "weight": 1,
+    //             "width": 5, 
+    //             "height": 5
+    //         },
+    //         {
+    //             "id": "horizontal-stripe-1",
+    //             "type": "horizontal-stripe",
+    //             "color": "808000",
+    //             "fill": "fff",
+    //             "weight": 3,
+    //         },
+    //         {
+    //             "id": "crosshatch-1",
+    //             "type": "crosshatch",
+    //             "color": "008000",
+    //             "fill": "fff",
+    //             "weight": 0.5,
+    //             "width": 8, 
+    //             "height": 8
+    //         },
+    //         {
+    //             "id": "vertical-stripe-1",
+    //             "type": "vertical-stripe",
+    //             "color": "000080",
+    //             "fill": "fff"
+    //         },
+    //         {
+    //             "id": "diagonal-stripe-2",
+    //             "type": "diagonal-stripe",
+    //             "color": "808080",
+    //             "fill": "fff"
+    //         }]
+
+    // for (let i = 0; i < palette15.length; i++) {
+    //     for (let j = 0; j < result.length; j++) {
+    //         console.log(array[j])        
+    //         // createPattern(array[j]);            
+    //     }
+    // }
+
     createPattern("circle-1", "circle", "#ffd700", "#fff", 1, 5, 5);
     createPattern("dots-1", "dots", "#ffb14e", "#fff", 3);
     createPattern("horizontal-stripe-1", "horizontal-stripe", "#fa8775", "#fff");
@@ -69,6 +188,13 @@
     createPattern("diagonal-stripe-2", "diagonal-stripe", "#cd34b5", "#fff", 3);
     createPattern("vertical-stripe-1", "vertical-stripe", "#9d02d7", "#fff");
     createPattern("crosshatch-1", "crosshatch", "#0000ff", "#fff", 0.5, 8, 8);
+
+    createPattern("circle-2", "circle", "#800000", "#fff", 1, 5, 5);
+    createPattern("horizontal-stripe-2", "horizontal-stripe", "#808000", "#fff", 3);
+    createPattern("diagonal-stripe-3", "diagonal-stripe", "#808080", "#fff");
+    createPattern("vertical-stripe-2", "diagonal-stripe", "#000080", "#fff");
+    createPattern("crosshatch-2", "crosshatch", "#008000", "#fff", 0.5, 8, 8);
+
     
     $('div.d3-chart').each(function(index, element) {
         /**
@@ -431,8 +557,9 @@
             
             svg[index] = d3.select("#" + placeholderId[index])
                 .append('svg')
-                .attr('preserveAspectRatio', 'xMinYMin meet')
-                .attr('viewBox', '0 0 ' + (width + margin.left + margin.right) + ' ' + (height + margin.top + margin.bottom))
+                .attr({width: (width + margin.left + margin.right), height: (height + margin.top + margin.bottom)})
+                // .attr('preserveAspectRatio', 'xMinYMin meet')
+                // .attr('viewBox', '0 0 ' + (width + margin.left + margin.right) + ' ' + (height + margin.top + margin.bottom))
             svg[index].append('g')
                 .attr("class", "grid-x");
             svg[index].append('g')
@@ -789,18 +916,37 @@
             .value(function(d) {
                 return d.value;
             });
-        
+
+        var palette14 = [
+            "url(#circle-1)", "#ffd700", 
+            "url(#dots-1)", "#ffb14e", 
+            "url(#horizontal-stripe-1)", "#fa8775", 
+            "url(#diagonal-stripe-1)", "#ea5f94",
+            "url(#diagonal-stripe-2)", "#cd34b5",
+            "url(#vertical-stripe-1)", "#9d02d7", 
+            "url(#crosshatch-1)", "#0000ff"
+        ]
+
+        var palette15 = [
+            "url(#circle-2)", "#ff0000",
+            "#ffa500", "#ffff00",
+            "url(#horizontal-stripe-2)", "#800080",
+            "#ff00ff", "#00ff00",
+            "url(#crosshatch-2)", "url(#vertical-stripe-2)",
+            "#0000ff", "#00ffff",
+            "#008080", "#c0c0c0",
+            "url(#diagonal-stripe-3)"
+        ]
+
+        var colour = palette14;
+
+        if(params[instance]['colour'] == "palette-15") {
+            colour = palette15;
+        }
+
         var color = d3.scale.ordinal()
             .domain(chartDataStore[instance]['header'])
-            .range([
-                "url(#circle-1)", "#ffd700", 
-                "url(#dots-1)", "#ffb14e", 
-                "url(#horizontal-stripe-1)", "#fa8775", 
-                "url(#diagonal-stripe-1)", "#ea5f94",
-                "url(#diagonal-stripe-2)", "#cd34b5",
-                "url(#vertical-stripe-1)", "#9d02d7", 
-                "url(#crosshatch-1)", "#0000ff"
-            ]);
+            .range(colour);
             // .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
         
         var arc = d3.svg.arc()
@@ -904,7 +1050,7 @@
             
             var mousemove = function(d) {
                 tooltips
-                    .html(d.data.label + ' (' + format(d.value) + ')')
+                    .html(d.data.label + ' &ndash; ' + format(d.value) + '')
                     .style("left", Math.max(0, d3.event.layerX) + "px")
                     .style("top", (d3.event.layerY - 40) + "px");
             }
