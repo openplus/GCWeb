@@ -20,6 +20,10 @@
     pointer-events: none;
 }
 
+.mediumview .d3-bar, .smallview .d3-bar, .xsmallview .d3-bar {
+    overflow-x: scroll;
+}
+
 /* .grid-x .tick, .grid-y .tick {
     transition: 500ms;
 } */
