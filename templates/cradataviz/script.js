@@ -967,13 +967,13 @@
                 .data(pie(data), key)
                 .enter().append("g")
                 .attr("transform", function(d, i){
-                    return "translate(" + 0 + "," + (i * 16 - (height / 2) + 13) + ")";
+                    return "translate(" + 0 + "," + (i * 17 - (height / 2) + 15) + ")";
                 })
                 .attr("class", "legend-entry");
             
             chartLegend[instance].append("rect")
-                .attr("width", 13)
-                .attr("height", 13)
+                .attr("width", 15)
+                .attr("height", 15)
                 .attr("fill", function(d) {
                     return color(d.data.label);
                 });
@@ -984,7 +984,7 @@
                 })
                 .style("font-size", 10)
                 .attr("y", 11)
-                .attr("x", 15);
+                .attr("x", 17);
         }
         else {
             // Show labels
