@@ -2,6 +2,7 @@
     var instances = [];
     var svg = [];
     var chartDataStore = [];
+    var legendSvg = [];
     var chartLegend = [];
     var placeholderId = [];
     var params = [];
@@ -58,129 +59,6 @@
     * This @see https://fossheim.io/writing/posts/accessible-dataviz-d3-intro/ recommend to not put too much pattern as it can be too busy on the eyes
     * @todo Make multiple swatches so Author can chose which pattern and/or color they want
     */
-
-    //  "color": {
-    //     1: "ffd700",
-    //     2: "ffb14e",
-    //     3: "fa8775",
-    //     4: "ea5f94",
-    //     5: "cd34b5",
-    //     6: "9d02d7",
-    //     7: "0000ff"
-    // },
-
-    // var palette14 = [
-    //         {
-    //             "id": "circle-1",
-    //             "type": "circle",
-    //             "color": "ffd700",
-    //             "fill": "fff",
-    //             "weight": 1,
-    //             "width": 5, 
-    //             "height": 5
-    //         },
-    //         {
-    //             "id": "dots-1",
-    //             "type": "dots",
-    //             "color": "ffb14e",
-    //             "fill": "fff",
-    //             "weight": 3,
-    //         },
-    //         {
-    //             "id": "horizontal-stripe-1",
-    //             "type": "horizontal-stripe",
-    //             "color": "fa8775",
-    //             "fill": "fff"
-    //         },
-    //         {
-    //             "id": "diagonal-stripe-1",
-    //             "type": "diagonal-stripe",
-    //             "color": "ea5f94",
-    //             "fill": "fff"
-    //         },
-    //         {
-    //             "id": "diagonal-stripe-2",
-    //             "type": "diagonal-stripe",
-    //             "color": "cd34b5",
-    //             "fill": "fff",
-    //             "weight": 3
-    //         },
-    //         {
-    //             "id": "vertical-stripe-1",
-    //             "type": "vertical-stripe",
-    //             "color": "9d02d7",
-    //             "fill": "fff"
-    //         },
-    //         {
-    //             "id": "crosshatch-1",
-    //             "type": "crosshatch",
-    //             "color": "0000ff",
-    //             "fill": "fff",
-    //             "weight": 0.5,
-    //             "width": 8, 
-    //             "height": 8
-    //         }
-    //     ];
-
-    // "color": {
-    //     2: "ff0000",
-    //     3: "ffa500",
-    //     4: "ffff00",
-    //     6: "800080",
-    //     7: "ff00ff",
-    //     8: "00ff00",
-    //     11: "0000ff",
-    //     12: "00ffff",
-    //     13: "008080",
-    //     14: "c0c0c0"
-    // },
-
-    // var palette15 = 
-    //         [{
-    //             "id": "circle-1",
-    //             "type": "circle",
-    //             "color": "800000",
-    //             "fill": "fff",
-    //             "weight": 1,
-    //             "width": 5, 
-    //             "height": 5
-    //         },
-    //         {
-    //             "id": "horizontal-stripe-1",
-    //             "type": "horizontal-stripe",
-    //             "color": "808000",
-    //             "fill": "fff",
-    //             "weight": 3,
-    //         },
-    //         {
-    //             "id": "crosshatch-1",
-    //             "type": "crosshatch",
-    //             "color": "008000",
-    //             "fill": "fff",
-    //             "weight": 0.5,
-    //             "width": 8, 
-    //             "height": 8
-    //         },
-    //         {
-    //             "id": "vertical-stripe-1",
-    //             "type": "vertical-stripe",
-    //             "color": "000080",
-    //             "fill": "fff"
-    //         },
-    //         {
-    //             "id": "diagonal-stripe-2",
-    //             "type": "diagonal-stripe",
-    //             "color": "808080",
-    //             "fill": "fff"
-    //         }]
-
-    // for (let i = 0; i < palette15.length; i++) {
-    //     for (let j = 0; j < result.length; j++) {
-    //         console.log(array[j])        
-    //         // createPattern(array[j]);            
-    //     }
-    // }
-
     createPattern("circle-1", "circle", "#ffd700", "#fff", 1, 5, 5);
     createPattern("dots-1", "dots", "#ffb14e", "#fff", 3);
     createPattern("horizontal-stripe-1", "horizontal-stripe", "#fa8775", "#fff");
@@ -190,7 +68,7 @@
     createPattern("crosshatch-1", "crosshatch", "#0000ff", "#fff", 0.5, 8, 8);
 
     createPattern("circle-2", "circle", "#800000", "#fff", 1, 5, 5);
-    createPattern("horizontal-stripe-2", "horizontal-stripe", "#808000", "#fff", 3);
+    createPattern("horizontal-stripe-2", "horizontal-stripe", "#808000", "#fff", 1, 6, 6);
     createPattern("diagonal-stripe-3", "diagonal-stripe", "#808080", "#fff");
     createPattern("vertical-stripe-2", "diagonal-stripe", "#000080", "#fff");
     createPattern("crosshatch-2", "crosshatch", "#008000", "#fff", 0.5, 8, 8);
@@ -324,7 +202,7 @@
         format = placeholderFormat;
 
         if (placeholderFormat == undefined) {
-            format = "";
+            format = "$,";
         }
 
         return format;
@@ -521,12 +399,17 @@
         */
         if ($.inArray('d3-pie', classArray[index]) > 0) {
             var width = 960,
-                height = 500,
+                height = 960,
                 radius = Math.min(width, height) / 2;
         
             svg[index] = d3.select("#" + placeholderId[index])
+                .append("div")
+                .attr({class: 'row'})
+                .append("div")
+                .attr({class: 'col-md-6'})
                 .append("svg")
-                .attr({class: 'd3-svg', width: '100%', height: '100%', preserveAspectRatio: 'xMidYMid meet', viewBox: '0 0 ' + (width / 2) + ' ' + (height / 2) + ''})
+                // .attr({class: 'd3-svg', width: '100%', height: '100%', preserveAspectRatio: 'xMidYMid meet', viewBox: '0 0 ' + (width / 4) + ' ' + (height / 4) + ''})
+                .attr({class: 'd3-svg', width: '100%', height: '100%', preserveAspectRatio: 'xMidYMid meet', viewBox: '0 0 ' + 220 + ' ' + 220 + ''})
                 .append("g");
             svg[index].append("g")
                 .attr("class", "slices");
@@ -534,12 +417,22 @@
                 .attr("class", "labels");
             svg[index].append("g")
                 .attr("class", "lines");
-            
             svg[index].append("g").attr({["aria-label"]: "Total", class: "total"});
-            svg[index].append("g").attr({["aria-label"]: "Legend", class: "legend", transform: "translate(0,15)"});
-            
-            svg[index].attr("transform", "translate(120,120)");
-            
+            svg[index].attr("transform", "translate(100,100)");
+
+            legendSvg[index] = d3.select("#" + placeholderId[index])
+                .selectAll('.row')
+                .append("div")
+                .attr({class: 'col-md-6'})
+                .append("svg")
+                .attr({class: 'd3-legend', width: '100%', height: '100%', preserveAspectRatio: 'xMidYMid meet', viewBox: '0 0 ' + (width / 4) + ' ' + (height / 4) + ''})
+                // .attr({class: 'd3-legend', width: '100%', height: '100%', preserveAspectRatio: 'xMidYMid meet', viewBox: '0 0 ' + 200 + ' ' + 200 + ''})
+                .append("g")
+                .attr("transform", "translate(0,100)");
+
+            legendSvg[index].append("g")
+                .attr({["aria-label"]: "Legend", class: "legend", transform: "translate(0,15)"});
+
             changePieData(plotPieData(chartDataStore[index]['header'], chartDataStore[index]['data'][0]), index, formatOption);
         }
         /**
@@ -1050,7 +943,7 @@
             
             var mousemove = function(d) {
                 tooltips
-                    .html(d.data.label + ' &ndash; ' + format(d.value) + '')
+                    .html(d.data.label + ' ' + format(d.value) + '')
                     .style("left", Math.max(0, d3.event.layerX) + "px")
                     .style("top", (d3.event.layerY - 40) + "px");
             }
@@ -1065,30 +958,33 @@
                 .on("mouseleave", mouseleave)
             
             // We remove the current "legend-entry, to update for the newest one"
-            svg[instance].select(".legend").selectAll(".legend-entry").remove();
+            // svg[instance].select(".legend").selectAll(".legend-entry").remove();
+            legendSvg[instance].select(".legend").selectAll(".legend-entry").remove();
+
             // Build legend
-            chartLegend[instance] = svg[instance].select(".legend").selectAll(".legend-entry")
+            // chartLegend[instance] = svg[instance].select(".legend").selectAll(".legend-entry")
+            chartLegend[instance] = legendSvg[instance].select(".legend").selectAll(".legend-entry")
                 .data(pie(data), key)
                 .enter().append("g")
                 .attr("transform", function(d, i){
-                    return "translate(" + (width - 120) + "," + (i * 15 - (height / 2) + 8) + ")";
+                    return "translate(" + 0 + "," + (i * 16 - (height / 2) + 13) + ")";
                 })
                 .attr("class", "legend-entry");
             
             chartLegend[instance].append("rect")
-                .attr("width", 8)
-                .attr("height", 8)
+                .attr("width", 13)
+                .attr("height", 13)
                 .attr("fill", function(d) {
                     return color(d.data.label);
                 });
             
             chartLegend[instance].append("text")
                 .text(function(d){
-                    return d.data.label + " - " + format(d.data.value);
+                    return d.data.label + " " + format(d.data.value);
                 })
                 .style("font-size", 10)
-                .attr("y", 8)
-                .attr("x", 10);
+                .attr("y", 11)
+                .attr("x", 15);
         }
         else {
             // Show labels
