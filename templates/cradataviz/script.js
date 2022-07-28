@@ -10,7 +10,7 @@
     var lang = document.documentElement.lang;
 
     /**
-     * Set the locale of D3 depending the language of the page
+     * Set the locale of D3 depending the language of the page 
      * @see https://github.com/d3/d3-3.x-api-reference/blob/master/Localization.md#d3_locale
      */
     var localeEN = {
