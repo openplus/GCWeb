@@ -1,0 +1,200 @@
+---
+{
+	"title": "Individual Taxfilers by Province or Territory and Tax Bracket",
+	"language": "en",
+	"altLangPrefix": "donut",
+	"altLangPage": "donut1-fr.html",
+	"pageclass": "cnt-wdth",
+	"breadcrumbs":  [
+		{ "title": "Canada Revenue Agency", "link": "https://www.canada.ca/en/revenue-agency.html" },
+		{ "title": "Income Statistics and GST/HST Statistics", "link": "https://www.canada.ca/en/revenue-agency/programs/about-canada-revenue-agency-cra/income-statistics-gst-hst-statistics.html" },
+		{ "title": "Individual Tax Statistics by Tax Bracket (ITSTB)", "link": "https://www.canada.ca/en/revenue-agency/programs/about-canada-revenue-agency-cra/income-statistics-gst-hst-statistics/individual-tax-statistics-tax-bracket.html" }
+	],
+	"secondlevel": false,
+	"dateModified": "2021-11-17",
+	"share": "true"
+}
+---
+{% include components/inc-byline.html %}
+<link rel="stylesheet" href="style.css" />
+<p>Below are interactive data visualizations, a table below will also render the data. The source content is available as structured dataset at the base of this page.</p>
+
+<div class="row">
+	<div class="col-md-4 brdr-tp brdr-rght brdr-bttm brdr-lft hght-inhrt">
+		<h2 class="h4">Data Filters</h2>
+		<p>Select data filters below to apply dynamic changes to visualizations and table.</p>
+		<div class="d3-filters"></div>
+	</div>
+	<div class="col-md-8">
+		<h2 class="h4">Donut Chart</h2>
+		<p>This donut chart represents provincial tax bracket information. The value in the center of the chart consists of the brakets total for all selected provinces.</p>
+		<p><span class="label label-primary">Tip: Hover over a chart segment to see more</span></p>
+		<div class="d3-chart d3-pie" id="my-dataviz-pie-1" data-name="my-table" data-params='{"plot_type":"column","column":"2","exclude_row":"15"}'></div>
+	</div>
+</div>
+<h2 class="h4">Bar Chart</h2>
+<p>This bar chart represents provincial tax bracket information. The values adjust to reflect the data filters, and correlate to other charts and data table.</p>
+<p><span class="label label-primary">Tip: Hover over a chart segment to see more</span></p>
+
+
+<div class="d3-chart d3-bar" id="my-dataviz-bar-1" data-name="my-table" data-params='{"plot_type":"column","column":"2","exclude_row":"15"}'></div>
+
+<h2 class="h4">Data Table</h2>
+<p>This table represents provincial tax bracket information. The values adjust to reflect the data filters, and correlate to other charts and data table. You can download the source dataset referenced below.</p>
+<div class="table-responsive">
+	<table class="wb-tables table table-striped table-hover" id="my-table">
+		<caption>Net Federal Tax by Province or Territory</caption>
+		<thead>
+			<tr>
+				<th scope="col">Province or Territory</th>
+				<th scope="col">$45,916 or less</th>
+				<th scope="col">$45,917 - $91,831</th>
+				<th scope="col">$91,832 - $142,353</th>
+				<th scope="col">$142,354 - $202,800</th>
+				<th scope="col">$202,801 or more</th>
+				<th scope="col">All Brackets</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td class="header">Newfoundland and Labrador</td>
+				<td>295540</td>
+				<td>95480</td>
+				<td>22800</td>
+				<td>6550</td>
+				<td>3620</td>
+				<td>423990</td>
+			</tr>
+			<tr>
+				<td class="header">Prince Edward Island</td>
+				<td>84280</td>
+				<td>27180</td>
+				<td>3720</td>
+				<td>1000</td>
+				<td>620</td>
+				<td>116790</td>
+			</tr>
+			<tr>
+				<td class="header">Nova Scotia</td>
+				<td>522960</td>
+				<td>175640</td>
+				<td>30800</td>
+				<td>7790</td>
+				<td>5060</td>
+				<td>742250</td>
+			</tr>
+			<tr>
+				<td class="header">New Brunswick</td>
+				<td>444660</td>
+				<td>134190</td>
+				<td>21140</td>
+				<td>5180</td>
+				<td>3190</td>
+				<td>608350</td>
+			</tr>
+			<tr>
+				<td class="header">Quebec</td>
+				<td>4626080</td>
+				<td>1555870</td>
+				<td>262810</td>
+				<td>63240</td>
+				<td>55090</td>
+				<td>6563090</td>
+			</tr>
+			<tr>
+				<td class="header">Ontario</td>
+				<td>6830300</td>
+				<td>2726210</td>
+				<td>645870</td>
+				<td>181410</td>
+				<td>154470</td>
+				<td>10538260</td>
+			</tr>
+			<tr>
+				<td class="header">Manitoba</td>
+				<td>670210</td>
+				<td>240930</td>
+				<td>43710</td>
+				<td>9980</td>
+				<td>8080</td>
+				<td>972900</td>
+			</tr>
+			<tr>
+				<td class="header">Saskatchewan</td>
+				<td>530440</td>
+				<td>226680</td>
+				<td>57170</td>
+				<td>15390</td>
+				<td>8300</td>
+				<td>837980</td>
+			</tr>
+			<tr>
+				<td class="header">Alberta</td>
+				<td>1774590</td>
+				<td>855580</td>
+				<td>267920</td>
+				<td>91160</td>
+				<td>69820</td>
+				<td>3059060</td>
+			</tr>
+			<tr>
+				<td class="header">British Columbia</td>
+				<td>2459710</td>
+				<td>947700</td>
+				<td>227570</td>
+				<td>66640</td>
+				<td>52860</td>
+				<td>3754480</td>
+			</tr>
+			<tr>
+				<td class="header">Northwest Territories</td>
+				<td>17220</td>
+				<td>8850</td>
+				<td>4130</td>
+				<td>830</td>
+				<td>370</td>
+				<td>31390</td>
+			</tr>
+			<tr>
+				<td class="header">Yukon</td>
+				<td>16220</td>
+				<td>9440</td>
+				<td>2100</td>
+				<td>440</td>
+				<td>240</td>
+				<td>28430</td>
+			</tr>
+			<tr>
+				<td class="header">Nunavut</td>
+				<td>14270</td>
+				<td>4620</td>
+				<td>2540</td>
+				<td>500</td>
+				<td>160</td>
+				<td>22090</td>
+			</tr>
+			<tr>
+				<td class="header">Non-resident</td>
+				<td>135200</td>
+				<td>6990</td>
+				<td>3070</td>
+				<td>1320</td>
+				<td>2280</td>
+				<td>148850</td>
+			</tr>
+			<tr>
+				<td class="header">All Canada</td>
+				<td>18421660</td>
+				<td>7015350</td>
+				<td>1595340</td>
+				<td>451420</td>
+				<td>364140</td>
+				<td>27847910</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<script src="https://d3js.org/d3.v3.min.js"></script>
+<script src="jquery.min.js"></script>
+<script src="script.js"></script>
