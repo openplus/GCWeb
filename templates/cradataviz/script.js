@@ -10,7 +10,7 @@
     var lang = document.documentElement.lang;
 
     /**
-     * Set the locale of D3 depending the language of the  page
+     * Set the locale of D3 depending the language of the page
      * @see https://github.com/d3/d3-3.x-api-reference/blob/master/Localization.md#d3_locale
      */
     var localeEN = {
@@ -409,7 +409,7 @@
                 .attr({class: 'col-md-6'})
                 .append("svg")
                 // .attr({class: 'd3-svg', width: '100%', height: '100%', preserveAspectRatio: 'xMidYMid meet', viewBox: '0 0 ' + (width / 4) + ' ' + (height / 4) + ''})
-                .attr({class: 'd3-svg', width: '100%', height: '100%', preserveAspectRatio: 'xMidYMid meet', viewBox: '0 0 ' + 220 + ' ' + 220 + ''})
+                .attr({class: 'd3-svg', width: '100%', height: '100%', preserveAspectRatio: 'xMidYMid meet', viewBox: '0 0 ' + 200 + ' ' + 200 + ''})
                 .append("g");
             svg[index].append("g")
                 .attr("class", "slices");
@@ -424,14 +424,18 @@
                 .selectAll('.row')
                 .append("div")
                 .attr({class: 'col-md-6'})
-                .append("svg")
-                .attr({class: 'd3-legend', width: '100%', height: '100%', preserveAspectRatio: 'xMidYMid meet', viewBox: '0 0 ' + (width / 4) + ' ' + (height / 4) + ''})
+                //.append("svg")
+                //.attr({class: 'd3-legend', width: '100%', height: '100%', preserveAspectRatio: 'xMidYMid meet', viewBox: '0 0 ' + (width / 4) + ' ' + 280 + ''})
                 // .attr({class: 'd3-legend', width: '100%', height: '100%', preserveAspectRatio: 'xMidYMid meet', viewBox: '0 0 ' + 200 + ' ' + 200 + ''})
-                .append("g")
-                .attr("transform", "translate(0,100)");
+                .append("div")
+				.attr({class: 'd3-legend'});
+				//.append("g")
+                //.attr("transform", "translate(0,100)");
 
-            legendSvg[index].append("g")
-                .attr({["aria-label"]: "Legend", class: "legend", transform: "translate(0,15)"});
+            //legendSvg[index].append("g")
+			legendSvg[index].append("div")
+                //.attr({["aria-label"]: "Legend", class: "legend", transform: "translate(0,15)"});
+				.attr({["aria-label"]: "Legend", class: "legend"});
 
             changePieData(plotPieData(chartDataStore[index]['header'], chartDataStore[index]['data'][0]), index, formatOption);
         }
@@ -965,26 +969,30 @@
             // chartLegend[instance] = svg[instance].select(".legend").selectAll(".legend-entry")
             chartLegend[instance] = legendSvg[instance].select(".legend").selectAll(".legend-entry")
                 .data(pie(data), key)
-                .enter().append("g")
-                .attr("transform", function(d, i){
-                    return "translate(" + 0 + "," + (i * 17 - (height / 2) + 15) + ")";
-                })
-                .attr("class", "legend-entry");
+                .enter().append("div")
+				//.attr({width: '100%', height: '100%', preserveAspectRatio: 'xMidYMid meet', viewBox: '0 0 ' + 220 + ' ' + 15 + ''})
+                /*.attr("transform", function(d, i){
+                    return "translate(" + 0 + "," + (i * 20 - (height / 2) + 15) + ")";
+                })*/
+                .attr({class: "legend-entry"});
             
-            chartLegend[instance].append("rect")
-                .attr("width", 15)
-                .attr("height", 15)
+            chartLegend[instance]
+				.append("svg")
+				.attr({width: 20, height: 20, class: "legend-color"})
+				.append("rect")
+                .attr("width", 20)
+                .attr("height", 20)
                 .attr("fill", function(d) {
                     return color(d.data.label);
                 });
             
-            chartLegend[instance].append("text")
+            chartLegend[instance].append("p")
                 .text(function(d){
                     return d.data.label + " " + format(d.data.value);
                 })
-                .style("font-size", 10)
-                .attr("y", 11)
-                .attr("x", 17);
+                //.style("font-size", 10)
+                //.attr("y", 11)
+                //.attr("x", 17);
         }
         else {
             // Show labels
