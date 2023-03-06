@@ -91,11 +91,11 @@
         // Store instances
         if ($.inArray('d3-pie', classArray[index]) > 0) {
             instances[index] = 'pie';
-            placeholderFigCaption = "Donut Chart for ";
+            placeholderFigCaption = lang == 'en' ? "Donut Chart for " : "Graphique en anneau pour ";
         }
         else if ($.inArray('d3-bar', classArray[index]) > 0) {
             instances[index] = 'bar';
-            placeholderFigCaption = "Bar Chart for ";
+            placeholderFigCaption = lang == 'en' ? "Bar Chart for " : "Diagramme à bandes pour ";
         }
         else if ($.inArray('d3-table', classArray[index]) > 0) {
             instances[index] = 'table';
@@ -544,6 +544,7 @@
         * Wrap chart in figure with caption
         */
        var placeholderName = $(".d3-bar").attr('data-name');
+       var placeholderFigCaption = lang == 'en' ? "Bar Chart for " : "Diagramme à bandes pour ";
 
        if(document.getElementById(placeholderName).tagName === "A" && params[instance]['column_name'] == undefined) {
            d3.select(".d3-bar-fig").selectAll("figcaption").remove();
@@ -552,7 +553,7 @@
            var csvCaption = $('#' + placeholderName + '').attr('title');
    
            if(csvCaption != undefined && csvCaption != "") {
-               d3.select(".d3-bar-fig").insert("figcaption", ":first-child").text("Bar Chart for " + csvCaption + " (" + currentCategory + ")");
+               d3.select(".d3-bar-fig").insert("figcaption", ":first-child").text(placeholderFigCaption + csvCaption + " (" + currentCategory + ")");
            }
        }
 
@@ -706,7 +707,7 @@
             .attr("text-anchor", "end")
             .attr("x", width / 2)
             .attr("y", 70)
-            .text("X axis title");
+            .text(params[instance]['axis_x_title']);
         
         var gridY = svg[instance].select(".grid-y")
         
@@ -719,7 +720,7 @@
             .attr("transform", "rotate(-90)")
             .attr("y", -margin.left + 20)
             .attr("x", -height / 2)
-            .text("Y axis title")
+            .text(params[instance]['axis_y_title'])
 
         /** Testing this code:
         * @see https://www.d3-graph-gallery.com/graph/interactivity_tooltip.html
@@ -784,7 +785,9 @@
         /**
         * Wrap chart in figure with caption
         */
-         var placeholderName = $(".d3-pie").attr('data-name');
+        var placeholderName = $(".d3-pie").attr('data-name');
+        var placeholderFigCaption = lang == 'en' ? "Donut Chart for " : "Graphique en anneau pour ";
+
          if(document.getElementById(placeholderName).tagName === "A" && params[instance]['column_name'] == undefined) {
              d3.select(".d3-pie-fig").selectAll("figcaption").remove();
              var currentCategory = document.querySelector('input[type="radio"]:checked').value;
@@ -792,7 +795,7 @@
              var csvCaption = $('#' + placeholderName + '').attr('title');
      
              if(csvCaption != undefined && csvCaption != "") {
-                 d3.select(".d3-pie-fig").insert("figcaption", ":first-child").text("Donut Chart for " + csvCaption + " (" + currentCategory + ")");
+                 d3.select(".d3-pie-fig").insert("figcaption", ":first-child").text(placeholderFigCaption + csvCaption + " (" + currentCategory + ")");
              }
          }
  
@@ -1175,7 +1178,7 @@
     function wrap(text, width) {
         text.each(function() {
             var text = d3.select(this),
-                words = text.text().split(/\s+/).reverse(),
+                words = text.text().split(/[\s-]+/).reverse(),
                 word,
                 line = [],
                 lineNumber = 0,
