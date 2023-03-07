@@ -86,16 +86,16 @@
             params[index] = $.parseJSON(placeholderParams);
         var placeholderTag = document.getElementById(placeholderName),
             formatOption = setFormat(index),
-            placeholderFigCaption;
+            placeholderFigCaption = "";
 
         // Store instances
         if ($.inArray('d3-pie', classArray[index]) > 0) {
             instances[index] = 'pie';
-            placeholderFigCaption = lang == 'en' ? "Donut Chart for " : "Graphique en anneau pour ";
+            // placeholderFigCaption = lang == 'en' ? "Donut Chart for " : "Graphique en anneau pour ";
         }
         else if ($.inArray('d3-bar', classArray[index]) > 0) {
             instances[index] = 'bar';
-            placeholderFigCaption = lang == 'en' ? "Bar Chart for " : "Diagramme à bandes pour ";
+            // placeholderFigCaption = lang == 'en' ? "Bar Chart for " : "Diagramme à bandes pour ";
         }
         else if ($.inArray('d3-table', classArray[index]) > 0) {
             instances[index] = 'table';
@@ -544,7 +544,8 @@
         * Wrap chart in figure with caption
         */
        var placeholderName = $(".d3-bar").attr('data-name');
-       var placeholderFigCaption = lang == 'en' ? "Bar Chart for " : "Diagramme à bandes pour ";
+       var placeholderFigCaption = "";
+    //    var placeholderFigCaption = lang == 'en' ? "Bar Chart for " : "Diagramme à bandes pour ";
 
        if(document.getElementById(placeholderName).tagName === "A" && params[instance]['column_name'] == undefined) {
            d3.select(".d3-bar-fig").selectAll("figcaption").remove();
@@ -786,7 +787,9 @@
         * Wrap chart in figure with caption
         */
         var placeholderName = $(".d3-pie").attr('data-name');
-        var placeholderFigCaption = lang == 'en' ? "Donut Chart for " : "Graphique en anneau pour ";
+        // var placeholderFigCaption = lang == 'en' ? "Donut Chart for " : "Graphique en anneau pour ";
+       var placeholderFigCaption = "";
+
 
          if(document.getElementById(placeholderName).tagName === "A" && params[instance]['column_name'] == undefined) {
              d3.select(".d3-pie-fig").selectAll("figcaption").remove();
