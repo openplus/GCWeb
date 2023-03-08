@@ -216,21 +216,22 @@
         var column = chartDataStore[index]['category'][0];
 
         if(index == 0) {
-            $(".d3-filters").append("<div class='form-group chart-radio chart-radio-filters'></div>");
+            $(".d3-filters").addClass("row");
+            $(".d3-filters").append("<div class='form-group chart-radio chart-radio-filters col-sm-3'></div>");
             if(lang == "en") {
-                $(".chart-radio").html("<p><strong>Select a category</strong></p>");
+                $(".chart-radio").html("<p><strong>Select a category</strong></p><div class='chart-radio-container'></div>");
             } else if (lang == "fr") {
-                $(".chart-radio").html("<p><strong>Sélectionner une catégorie</strong></p>");
+                $(".chart-radio").html("<p><strong>Sélectionner une catégorie</strong></p><div class='chart-radio-container'></div>");
             }
         }
         
         if ($.inArray('d3-pie', classArray[index]) > 0) {
             // $(".d3-filters").append("<div class='form-group chart-radio chart-radio-filters filter-radio-chart-" + index + "'></div>");
-            $('.chart-radio').addClass("filter-radio-chart-" + index + "");
+            $('.chart-radio-container').addClass("filter-radio-chart-" + index + "");
         }
         else if ($.inArray('d3-bar', classArray[index]) > 0) {
-            // $(".d3-filters").append("<div class='form-group chart-radio chart-radio-filters filter-radio-chart-" + index + "'></div>");
-            $('.chart-radio').addClass("filter-radio-chart-" + index + "");
+            // $(".d3-filters").append("<div class='col-sm-4 form-group chart-radio chart-radio-filters filter-radio-chart-" + index + "'></div>");
+            $('.chart-radio-container').addClass("filter-radio-chart-" + index + "");
         }
         
         if(index == 0) {
@@ -239,9 +240,9 @@
                 var radioValue = value;
                 var radioName = 'chart[' + index + ']';
                 if(value == column) {
-                    var radioTemplate = '<div class="radio"><label><input data-chart="' + index + '" data-index="' + key + '" type="radio" name="' + radioName + '" value="' + radioValue + '" checked>' + radioLabel + "</label></div>";
+                    var radioTemplate = '<div class="radio"><label><input data-chart="' + index + '" data-index="' + key + '" type="radio" name="' + radioName + '" value="' + radioValue + '" checked>' + radioLabel + "</label></div></div>";
                 } else {
-                    var radioTemplate = '<div class="radio"><label><input data-chart="' + index + '" data-index="' + key + '" type="radio" name="' + radioName + '" value="' + radioValue + '">' + radioLabel + "</label></div>";
+                    var radioTemplate = '<div class="radio"><label><input data-chart="' + index + '" data-index="' + key + '" type="radio" name="' + radioName + '" value="' + radioValue + '">' + radioLabel + "</label></div></div>";
                 }
                 
                 $(".filter-radio-chart-" + index).append(radioTemplate);
@@ -277,25 +278,24 @@
         var headerName = params[index]["header"];
 
        if(index == 0) {
-           $(".d3-filters").append("<div class='form-group chart-checkbox chart-checkbox-filters'></div>");
+           $(".d3-filters").append("<div class='form-group chart-checkbox chart-checkbox-filters col-sm-9'></div>");
 
            if(headerName != undefined) {
                if(lang == "en") {
-                   $(".chart-checkbox").html("<p><strong>Select the " + headerName + "</strong></p>");
+                   $(".chart-checkbox").html("<p><strong>Select the " + headerName + "</strong></p><div class='chart-checkbox-container row'></div>");
                 } else if(lang == "fr") {
-                    $(".chart-checkbox").html("<p><strong>Choisir un/une " + headerName + "</strong></p>");
+                    $(".chart-checkbox").html("<p><strong>Choisir un/une " + headerName + "</strong></p><div class='chart-checkbox-container row'></div>");
                }
            }
        }
 
-
         if ($.inArray('d3-pie', classArray[index]) > 0) {
             // $(".d3-filters").append("<div class='form-group chart-checkbox chart-checkbox-filters filter-checkbox-chart-" + index + "'></div>");
-            $(".chart-checkbox").addClass("filter-checkbox-chart-" + index + "");
+            $(".chart-checkbox-container").addClass("filter-checkbox-chart-" + index + "");
         }
         else if ($.inArray('d3-bar', classArray[index]) > 0) {
             // $(".d3-filters").append("<div class='form-group chart-checkbox chart-checkbox-filters filter-checkbox-chart-" + index + "'></div>");
-            $(".chart-checkbox").addClass("filter-checkbox-chart-" + index + "");
+            $(".chart-checkbox-container").addClass("filter-checkbox-chart-" + index + "");
         }
         
         if (index == 0) {
@@ -303,7 +303,7 @@
                 var checkboxLabel = value;
                 var checkboxValue = value;
                 var checkboxName = 'chart[' + index + '][' + key + ']';
-                var checkboxTemplate = '<div class="checkbox"><label><input data-chart="' + index + '" data-index="' + key + '" type="checkbox" name="' + checkboxName + '" value="' + checkboxValue + '" checked>' + checkboxLabel + "</label></div>";
+                var checkboxTemplate = '<div class="col-sm-4 mrgn-tp-0 mrgn-bttm-sm"><div class="checkbox mrgn-tp-0 mrgn-bttm-0"><label><input data-chart="' + index + '" data-index="' + key + '" type="checkbox" name="' + checkboxName + '" value="' + checkboxValue + '" checked>' + checkboxLabel + "</label></div></div>";
                 
                 $(".filter-checkbox-chart-" + index).append(checkboxTemplate);
             });
