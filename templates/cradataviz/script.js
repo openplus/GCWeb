@@ -669,7 +669,7 @@
         var vAxis = d3.svg.axis()
             .scale(verticalGuideScale)
             .orient('left')
-            .tickFormat(d3.format(formatOption))
+            .tickFormat(locale.numberFormat(formatOption))
             .ticks(10)
         
         var verticalGuide = svg[instance].select(".grid-y").transition().duration(750);
