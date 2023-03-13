@@ -240,9 +240,9 @@
                 var radioValue = value;
                 var radioName = 'chart[' + index + ']';
                 if(value == column) {
-                    var radioTemplate = '<li><div class="radio"><label><input data-chart="' + index + '" data-index="' + key + '" type="radio" name="' + radioName + '" value="' + radioValue + '" checked>' + radioLabel + "</label></div></div></li>";
+                    var radioTemplate = '<li class="mrgn-tp-0 mrgn-bttm-sm"><div class="radio mrgn-tp-0 mrgn-bttm-0"><label><input data-chart="' + index + '" data-index="' + key + '" type="radio" name="' + radioName + '" value="' + radioValue + '" checked>' + radioLabel + "</label></div></div></li>";
                 } else {
-                    var radioTemplate = '<li><div class="radio"><label><input data-chart="' + index + '" data-index="' + key + '" type="radio" name="' + radioName + '" value="' + radioValue + '">' + radioLabel + "</label></div></div></li>";
+                    var radioTemplate = '<li class="mrgn-tp-0 mrgn-bttm-sm"><div class="radio mrgn-tp-0 mrgn-bttm-0"><label><input data-chart="' + index + '" data-index="' + key + '" type="radio" name="' + radioName + '" value="' + radioValue + '">' + radioLabel + "</label></div></div></li>";
                 }
                 
                 $(".filter-radio-chart-" + index).append(radioTemplate);
