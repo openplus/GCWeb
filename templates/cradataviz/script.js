@@ -217,11 +217,11 @@
 
         if(index == 0) {
             $(".d3-filters").addClass("row");
-            $(".d3-filters").append("<div class='form-group chart-radio chart-radio-filters col-sm-3'></div>");
+            $(".d3-filters").append("<div class='form-group chart-radio chart-radio-filters col-md-3 col-sm-4'></div>");
             if(lang == "en") {
-                $(".chart-radio").html("<p><strong>Select a category</strong></p><div class='chart-radio-container'></div>");
+                $(".chart-radio").html("<p><strong>Select a category</strong></p><ul class='chart-radio-container list-unstyled'></ul>");
             } else if (lang == "fr") {
-                $(".chart-radio").html("<p><strong>Sélectionner une catégorie</strong></p><div class='chart-radio-container'></div>");
+                $(".chart-radio").html("<p><strong>Sélectionner une catégorie</strong></p><ul class='chart-radio-container list-unstyled'></ul>");
             }
         }
         
@@ -240,9 +240,9 @@
                 var radioValue = value;
                 var radioName = 'chart[' + index + ']';
                 if(value == column) {
-                    var radioTemplate = '<div class="radio"><label><input data-chart="' + index + '" data-index="' + key + '" type="radio" name="' + radioName + '" value="' + radioValue + '" checked>' + radioLabel + "</label></div></div>";
+                    var radioTemplate = '<li><div class="radio"><label><input data-chart="' + index + '" data-index="' + key + '" type="radio" name="' + radioName + '" value="' + radioValue + '" checked>' + radioLabel + "</label></div></div></li>";
                 } else {
-                    var radioTemplate = '<div class="radio"><label><input data-chart="' + index + '" data-index="' + key + '" type="radio" name="' + radioName + '" value="' + radioValue + '">' + radioLabel + "</label></div></div>";
+                    var radioTemplate = '<li><div class="radio"><label><input data-chart="' + index + '" data-index="' + key + '" type="radio" name="' + radioName + '" value="' + radioValue + '">' + radioLabel + "</label></div></div></li>";
                 }
                 
                 $(".filter-radio-chart-" + index).append(radioTemplate);
@@ -278,13 +278,13 @@
         var headerName = params[index]["header"];
 
        if(index == 0) {
-           $(".d3-filters").append("<div class='form-group chart-checkbox chart-checkbox-filters col-sm-9'></div>");
+           $(".d3-filters").append("<div class='form-group chart-checkbox chart-checkbox-filters col-md-9 col-sm-8'></div>");
 
            if(headerName != undefined) {
                if(lang == "en") {
-                   $(".chart-checkbox").html("<p><strong>Select the " + headerName + "</strong></p><div class='chart-checkbox-container row'></div>");
+                   $(".chart-checkbox").html("<p><strong>Select the " + headerName + "</strong></p><ul class='chart-checkbox-container list-unstyled colcount-md-3 colcount-sm-2'></ul>");
                 } else if(lang == "fr") {
-                    $(".chart-checkbox").html("<p><strong>Choisir un/une " + headerName + "</strong></p><div class='chart-checkbox-container row'></div>");
+                    $(".chart-checkbox").html("<p><strong>Choisir un/une " + headerName + "</strong></p><ul class='chart-checkbox-container list-unstyled colcount-md-3 colcount-sm-2'></ul>");
                }
            }
        }
@@ -303,7 +303,7 @@
                 var checkboxLabel = value;
                 var checkboxValue = value;
                 var checkboxName = 'chart[' + index + '][' + key + ']';
-                var checkboxTemplate = '<div class="col-sm-4 mrgn-tp-0 mrgn-bttm-sm"><div class="checkbox mrgn-tp-0 mrgn-bttm-0"><label><input data-chart="' + index + '" data-index="' + key + '" type="checkbox" name="' + checkboxName + '" value="' + checkboxValue + '" checked>' + checkboxLabel + "</label></div></div>";
+                var checkboxTemplate = '<li class="mrgn-tp-0 mrgn-bttm-sm"><div class="checkbox mrgn-tp-0 mrgn-bttm-0"><label><input data-chart="' + index + '" data-index="' + key + '" type="checkbox" name="' + checkboxName + '" value="' + checkboxValue + '" checked>' + checkboxLabel + "</label></div></li>";
                 
                 $(".filter-checkbox-chart-" + index).append(checkboxTemplate);
             });
