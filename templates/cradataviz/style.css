@@ -2,6 +2,14 @@
     transition: fill 350ms;
 }
 
+/* .stacks rect {
+    transition: all 750ms;
+} */
+
+.d3-table th:first-letter {
+    text-transform: uppercase;
+}
+
 .slice {
     stroke: white;
     stroke-width: 1px;
@@ -20,13 +28,13 @@
     pointer-events: none;
 }
 
-[class*="col-lg-"]:not(.col-lg-12) .d3-bar, 
-[class*="col-md-"]:not(.col-md-12) .d3-bar,
-[class*="col-sm-"]:not(.col-sm-12) .d3-bar,
-[class*="col-xs-"]:not(.col-xs-12) .d3-bar,
-.mediumview .d3-bar, 
-.smallview .d3-bar, 
-.xsmallview .d3-bar {
+[class*="col-lg-"]:not(.col-lg-12) .d3-bar, [class*="col-lg-"]:not(.col-lg-12) .d3-stack,
+[class*="col-md-"]:not(.col-md-12) .d3-bar, [class*="col-md-"]:not(.col-md-12) .d3-stack,
+[class*="col-sm-"]:not(.col-sm-12) .d3-bar, [class*="col-sm-"]:not(.col-sm-12) .d3-stack,
+[class*="col-xs-"]:not(.col-xs-12) .d3-bar, [class*="col-xs-"]:not(.col-xs-12) .d3-stack,
+.mediumview .d3-stack, .mediumview .d3-bar, 
+.smallview .d3-stack, .smallview .d3-bar, 
+.xsmallview .d3-stack, .xsmallview .d3-bar {
     overflow-x: scroll;
 }
 
@@ -47,6 +55,7 @@
 }
 
 .d3-pie-fig figcaption,
+.d3-stack-fig figcaption,
 .d3-bar-fig figcaption {
 	margin-bottom: 11.5px;
 }
